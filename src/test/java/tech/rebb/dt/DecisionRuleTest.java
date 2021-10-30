@@ -11,9 +11,11 @@ public class DecisionRuleTest {
     @Test
     public void testConstructor()
     {
-        DecisionRuleInput input = new DecisionRuleInput(1,3.6,">3.5");
+        DecisionRuleInputClause inputGPA = new DecisionRuleInputClause("GPA","gpa");
+        DecisionRuleInput input = new DecisionRuleInput(1, inputGPA,">3.5");
 
-        DecisionRuleOutput output = new DecisionRuleOutput("label","",DecisionRuleOutputType.BOOLEAN);
+        DecisionRuleOutputClause outputRank = new DecisionRuleOutputClause("Rank","",DecisionRuleOutputType.STRING);
+        DecisionRuleOutput output = new DecisionRuleOutput(outputRank);
 
         ArrayList<DecisionRuleInput> inputs = new ArrayList<>();
         ArrayList<DecisionRuleOutput> outputs = new ArrayList<>();
@@ -21,8 +23,9 @@ public class DecisionRuleTest {
         inputs.add(input);
         outputs.add(output);
 
-        DecisionRule rule = new DecisionRule(inputs, outputs);
+        DecisionRule rule = new DecisionRule(3.6, inputs, outputs);
 
+        assertEquals(3.6, rule.getObj());
         assertEquals(1, rule.getInputs().size());
         assertEquals(1, rule.getOutputs().size());
     }
@@ -30,20 +33,22 @@ public class DecisionRuleTest {
     @Test
     public void testSingleInputOutput()
     {
-        DecisionRuleInput input = new DecisionRuleInput(1,3.6,">3.5");
+        DecisionRuleInputClause inputGPA = new DecisionRuleInputClause("GPA","gpa");
+        DecisionRuleInput input = new DecisionRuleInput(1, inputGPA,">3.5");
 
-        DecisionRuleOutput output = new DecisionRuleOutput("label","",DecisionRuleOutputType.BOOLEAN);
-
+        DecisionRuleOutputClause outputRank = new DecisionRuleOutputClause("Rank","",DecisionRuleOutputType.STRING);
+        DecisionRuleOutput output = new DecisionRuleOutput(outputRank);
         ArrayList<DecisionRuleInput> inputs = new ArrayList<>();
         ArrayList<DecisionRuleOutput> outputs = new ArrayList<>();
 
         inputs.add(input);
         outputs.add(output);
 
-        DecisionRule rule = new DecisionRule(inputs, outputs);
+        DecisionRule rule = new DecisionRule(3.6, inputs, outputs);
 
         boolean result = rule.evaluate();
         assertTrue(result);
     }
+
 }
 

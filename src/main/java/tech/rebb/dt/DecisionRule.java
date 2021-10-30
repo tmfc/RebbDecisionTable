@@ -9,7 +9,13 @@ import org.antlr.v4.runtime.tree.ParseTree;
 
 public class DecisionRule {
 
-    EvalVisitor engine;
+    private final EvalVisitor engine;
+
+    private final Object obj;
+
+    public Object getObj() {
+        return obj;
+    }
 
     public boolean hasError() {
         return has_error;
@@ -21,7 +27,7 @@ public class DecisionRule {
         return errors;
     }
 
-    private List<String> errors;
+    private final List<String> errors;
 
     private ArrayList<DecisionRuleInput> inputs;
 
@@ -39,13 +45,14 @@ public class DecisionRule {
 
     private ArrayList<DecisionRuleOutput> outputs;
 
-    public DecisionRule() {
-        this.engine = new EvalVisitor("", null);
+    public DecisionRule(Object obj) {
+        this.obj = obj;
+        this.engine = new EvalVisitor(this.obj, null);
         this.errors = new ArrayList<String>();
     }
 
-    public DecisionRule(ArrayList<DecisionRuleInput> inputs, ArrayList<DecisionRuleOutput> outputs) {
-        this();
+    public DecisionRule(Object obj, ArrayList<DecisionRuleInput> inputs, ArrayList<DecisionRuleOutput> outputs) {
+        this(obj);
         this.inputs = inputs;
         this.outputs = outputs;
     }
@@ -94,7 +101,7 @@ public class DecisionRule {
             return false;
         }
 
-        Object obj = ruleInput.getObject();
+        Object obj = this.obj;
         engine.setObject(obj);
 
         engine.visit(tree);

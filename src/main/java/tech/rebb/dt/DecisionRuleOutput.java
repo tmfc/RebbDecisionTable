@@ -1,37 +1,28 @@
 package tech.rebb.dt;
 
 public class DecisionRuleOutput {
-    private final String label;
+    private final DecisionRuleOutputClause clause;
 
-    public String getLabel() {
-        return label;
+    public DecisionRuleOutputClause getClause() {
+        return clause;
     }
 
-    private final String expression;
-
-    public String getExpression() {
-        return expression;
-    }
-
-    private final DecisionRuleOutputType type;
-
-    public DecisionRuleOutputType getType() {
-        return type;
-    }
+    private Object value;
 
     public void setValue(Object value) {
         this.value = value;
     }
 
-    private Object value;
-
     public Object getValue() {
         return value;
     }
 
-    public DecisionRuleOutput(String label, String expression, DecisionRuleOutputType type) {
-        this.label = label;
-        this.expression = expression;
-        this.type = type;
+    public DecisionRuleOutput(DecisionRuleOutputClause clause) {
+        this.clause = clause;
     }
+
+    public String getExpression() {
+        return this.clause.getExpression();
+    }
+
 }

@@ -9,19 +9,21 @@ public class DecisionRuleOutputTest {
     @Test
     public void testConstructor()
     {
-        DecisionRuleOutput output = new DecisionRuleOutput("label","",DecisionRuleOutputType.BOOLEAN);
-        assertEquals("label",output.getLabel());
-        assertEquals("",output.getExpression());
-        assertEquals(DecisionRuleOutputType.BOOLEAN,output.getType());
+        DecisionRuleOutputClause outputRank = new DecisionRuleOutputClause("Rank","",DecisionRuleOutputType.STRING);
+
+        DecisionRuleOutput output = new DecisionRuleOutput(outputRank);
+        assertEquals("Rank", output.getClause().getName());
+        assertEquals("", output.getClause().getExpression());
+        assertEquals(DecisionRuleOutputType.STRING, output.getClause().getType());
     }
     @Test
     public void testSetValue()
     {
-        DecisionRuleOutput output = new DecisionRuleOutput("label","",  DecisionRuleOutputType.BOOLEAN);
-        output.setValue("value");
-        assertEquals(DecisionRuleOutputType.BOOLEAN,output.getValue());
+        DecisionRuleOutputClause outputRank = new DecisionRuleOutputClause("Rank","",DecisionRuleOutputType.STRING);
+
+        DecisionRuleOutput output = new DecisionRuleOutput(outputRank);
+        output.setValue("A");
+        assertEquals("A", output.getValue());
     }
-
-
 }
 
