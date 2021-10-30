@@ -9,17 +9,17 @@ public class DecisionRuleOutputTest {
     @Test
     public void testConstructor()
     {
-        DecisionRuleOutput output = new DecisionRuleOutput("label","","Boolean");
+        DecisionRuleOutput output = new DecisionRuleOutput("label","",DecisionRuleOutputType.BOOLEAN);
         assertEquals("label",output.getLabel());
         assertEquals("",output.getExpression());
-        assertEquals("Boolean",output.getType());
+        assertEquals(DecisionRuleOutputType.BOOLEAN,output.getType());
     }
     @Test
     public void testSetValue()
     {
-        DecisionRuleOutput output = new DecisionRuleOutput("label","","Boolean");
+        DecisionRuleOutput output = new DecisionRuleOutput("label","",  DecisionRuleOutputType.BOOLEAN);
         output.setValue("value");
-        assertEquals("value",output.getValue());
+        assertEquals(DecisionRuleOutputType.BOOLEAN,output.getValue());
     }
 
 

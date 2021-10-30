@@ -13,9 +13,9 @@ public class DecisionRuleOutput {
         return expression;
     }
 
-    private final String type;
+    private final DecisionRuleOutputType type;
 
-    public String getType() {
+    public DecisionRuleOutputType getType() {
         return type;
     }
 
@@ -29,7 +29,7 @@ public class DecisionRuleOutput {
         return value;
     }
 
-    public DecisionRuleOutput(String label, String expression, String type) {
+    public DecisionRuleOutput(String label, String expression, DecisionRuleOutputType type) {
         this.label = label;
         this.expression = expression;
         this.type = type;
