@@ -1,16 +1,24 @@
 package tech.rebb.dt;
 
-import java.util.ArrayList;
+import apple.laf.JRSUIConstants;
+
+import java.util.List;
 
 public class DecisionTable {
 
-    private int hitPolicy;
+    private String name;
 
-    public int getHitPolicy() {
+    public String getName() {
+        return name;
+    }
+
+    private HitPolicy hitPolicy;
+
+    public HitPolicy getHitPolicy() {
         return hitPolicy;
     }
 
-    public void setHitPolicy(int hitPolicy) {
+    public void setHitPolicy(HitPolicy hitPolicy) {
         this.hitPolicy = hitPolicy;
     }
 
@@ -24,14 +32,13 @@ public class DecisionTable {
         this.aggregation = aggregation;
     }
 
-    private ArrayList<DecisionRule> rules;
+    private List<DecisionRule> rules;
 
-
-    public ArrayList<DecisionRule> getRules() {
+    public List<DecisionRule> getRules() {
         return rules;
     }
 
-    public void setRules(ArrayList<DecisionRule> rules) {
+    public void setRules(List<DecisionRule> rules) {
         this.rules = rules;
     }
 
@@ -40,20 +47,14 @@ public class DecisionTable {
         this.rules.add(rule);
     }
 
-    private ArrayList<String> outputLabel;
+    private String outputLabel;
 
-    public ArrayList<String> getOutputLabel() {
+    public String getOutputLabel() {
         return outputLabel;
     }
 
-    public void setOutputLabel(ArrayList<String> outputLabel) {
+    public void setOutputLabel(String outputLabel) {
         this.outputLabel = outputLabel;
-    }
-
-    private ArrayList<DecisionRuleOutputEntry> outputs;
-
-    public ArrayList<DecisionRuleOutputEntry> getOutputs() {
-        return outputs;
     }
 
 
