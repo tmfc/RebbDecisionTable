@@ -50,9 +50,9 @@ public class DecisionTable {
         this.outputLabel = outputLabel;
     }
 
-    private ArrayList<DecisionRuleOutput> outputs;
+    private ArrayList<DecisionRuleOutputEntry> outputs;
 
-    public ArrayList<DecisionRuleOutput> getOutputs() {
+    public ArrayList<DecisionRuleOutputEntry> getOutputs() {
         return outputs;
     }
 

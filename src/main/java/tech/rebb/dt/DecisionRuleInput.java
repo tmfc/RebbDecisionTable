@@ -1,28 +1,21 @@
 package tech.rebb.dt;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class DecisionRuleInput {
 
-    private final DecisionRuleInputClause clause;
+    private final List<DecisionRuleInputEntry> entries;
 
-    public DecisionRuleInputClause getClause() {
-        return clause;
+    public List<DecisionRuleInputEntry> getEntries() {
+        return entries;
     }
 
-    private final int ruleNumber;
-
-    public int getRuleNumber() {
-        return ruleNumber;
+    public DecisionRuleInput() {
+        this.entries = new ArrayList<>();
     }
 
-    private final String expression;
-
-    public String getExpression() {
-        return expression;
-    }
-
-    public DecisionRuleInput(int ruleNumber, DecisionRuleInputClause clause, String expression) {
-        this.ruleNumber = ruleNumber;
-        this.clause = clause;
-        this.expression = expression;
+    public void addEntity(DecisionRuleInputEntry entry) {
+        this.entries.add(entry);
     }
 }

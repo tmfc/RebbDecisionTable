@@ -10,10 +10,14 @@ public class DecisionRuleInputTest {
     public void testConstructor()
     {
         DecisionRuleInputClause inputGPA = new DecisionRuleInputClause("GPA","gpa");
+        DecisionRuleInputEntry inputEntity = new DecisionRuleInputEntry(inputGPA,">3.5");
 
-        DecisionRuleInput input = new DecisionRuleInput(1, inputGPA,">3.5");
-        assertEquals(1,input.getRuleNumber());
-        assertEquals(">3.5",input.getExpression());
+        DecisionRuleInput input = new DecisionRuleInput();
+        input.addEntity(inputEntity);
+
+        assertEquals("GPA",input.getEntries().get(0).getClause().getName());
+        assertEquals("gpa",input.getEntries().get(0).getClause().getExpression());
+        assertEquals(">3.5",input.getEntries().get(0).getExpression());
     }
 }
 

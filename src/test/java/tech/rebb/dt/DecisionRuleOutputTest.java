@@ -10,20 +10,14 @@ public class DecisionRuleOutputTest {
     public void testConstructor()
     {
         DecisionRuleOutputClause outputRank = new DecisionRuleOutputClause("Rank","",DecisionRuleOutputType.STRING);
+        DecisionRuleOutputEntry outputEntity = new DecisionRuleOutputEntry(outputRank,"A");
 
-        DecisionRuleOutput output = new DecisionRuleOutput(outputRank);
-        assertEquals("Rank", output.getClause().getName());
-        assertEquals("", output.getClause().getExpression());
-        assertEquals(DecisionRuleOutputType.STRING, output.getClause().getType());
-    }
-    @Test
-    public void testSetValue()
-    {
-        DecisionRuleOutputClause outputRank = new DecisionRuleOutputClause("Rank","",DecisionRuleOutputType.STRING);
+        DecisionRuleOutput output = new DecisionRuleOutput("");
+        output.addEntity(outputEntity);
 
-        DecisionRuleOutput output = new DecisionRuleOutput(outputRank);
-        output.setValue("A");
-        assertEquals("A", output.getValue());
+        assertEquals("Rank",output.getEntries().get(0).getClause().getName());
+        assertEquals("",output.getEntries().get(0).getClause().getExpression());
+        assertEquals("A",output.getEntries().get(0).getValue());
     }
 }
 

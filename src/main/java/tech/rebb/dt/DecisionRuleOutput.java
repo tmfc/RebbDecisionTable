@@ -1,28 +1,28 @@
 package tech.rebb.dt;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class DecisionRuleOutput {
-    private final DecisionRuleOutputClause clause;
 
-    public DecisionRuleOutputClause getClause() {
-        return clause;
+    private final String label;
+
+    public String getLabel() {
+        return label;
     }
 
-    private Object value;
+    private final List<DecisionRuleOutputEntry> entries;
 
-    public void setValue(Object value) {
-        this.value = value;
+    public List<DecisionRuleOutputEntry> getEntries() {
+        return entries;
     }
 
-    public Object getValue() {
-        return value;
+    public DecisionRuleOutput(String label) {
+        this.label = label;
+        this.entries = new ArrayList<>();
     }
 
-    public DecisionRuleOutput(DecisionRuleOutputClause clause) {
-        this.clause = clause;
+    public void addEntity(DecisionRuleOutputEntry entry) {
+        this.entries.add(entry);
     }
-
-    public String getExpression() {
-        return this.clause.getExpression();
-    }
-
 }

@@ -1,6 +1,7 @@
 package tech.rebb.dt;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
@@ -17,6 +18,12 @@ public class DecisionRule {
         return obj;
     }
 
+    public boolean is_match;
+
+    public boolean isMatch() {
+        return is_match;
+    }
+
     public boolean hasError() {
         return has_error;
     }
@@ -29,21 +36,21 @@ public class DecisionRule {
 
     private final List<String> errors;
 
-    private ArrayList<DecisionRuleInput> inputs;
+    private List<DecisionRuleInput> inputs;
 
-    public ArrayList<DecisionRuleInput> getInputs() {
+    public List<DecisionRuleInput> getInputs() {
         return inputs;
     }
 
-    public void setInputs(ArrayList<DecisionRuleInput> inputs) {
+    public void setInputs(List<DecisionRuleInput> inputs) {
         this.inputs = inputs;
     }
 
-    public ArrayList<DecisionRuleOutput> getOutputs() {
+    public List<DecisionRuleOutputEntry> getOutputs() {
         return outputs;
     }
 
-    private ArrayList<DecisionRuleOutput> outputs;
+    private List<DecisionRuleOutputEntry> outputs;
 
     public DecisionRule(Object obj) {
         this.obj = obj;
@@ -51,7 +58,7 @@ public class DecisionRule {
         this.errors = new ArrayList<String>();
     }
 
-    public DecisionRule(Object obj, ArrayList<DecisionRuleInput> inputs, ArrayList<DecisionRuleOutput> outputs) {
+    public DecisionRule(Object obj, List<DecisionRuleInput> inputs, List<DecisionRuleOutputEntry> outputs) {
         this(obj);
         this.inputs = inputs;
         this.outputs = outputs;
@@ -63,67 +70,77 @@ public class DecisionRule {
         // evaluate every rule
         for (DecisionRuleInput input:
              this.inputs) {
-            boolean ruleResult = this.evaluateRuleInput(input);
+            boolean ruleResult = this.doEvaluateRuleInput(input);
             result = result && ruleResult;
         }
         // rule satisfied
         if(result)
         {
             //evaluate output value
-            for (DecisionRuleOutput output:
+            for (DecisionRuleOutputEntry output:
                  this.outputs)   {
                 if(!Objects.equals(output.getExpression(), ""))
                 {
-                    Object value = this.evaluateRuleOutput(output);
+                    Object value = this.doEvaluateRuleOutput(output);
                     //TODO: check value type
                     output.setValue(value);
                 }
             }
+            this.is_match = true;
         }
         return result;
     }
 
-    private boolean evaluateRuleInput(DecisionRuleInput ruleInput)
+    private boolean doEvaluateRuleInput(DecisionRuleInput ruleInput)
     {
-        String expression = ruleInput.getExpression();
-        CharStream input = CharStreams.fromString(expression);
-        RebbDTLexer lexer = new RebbDTLexer(input);
-        CommonTokenStream tokens = new CommonTokenStream(lexer);
-        RebbDTParser parser = new RebbDTParser(tokens);
-        parser.addErrorListener(RebbDTErrorListener.INSTANCE);
-        ParseTree tree = parser.unaryTests(); // parse
+        for (DecisionRuleInputEntry entity: ruleInput.getEntries()) {
 
-        if(RebbDTErrorListener.INSTANCE.hasError())
-        {
-            this.has_error = true;
-            this.errors.add(RebbDTErrorListener.INSTANCE.getError());
-            RebbDTErrorListener.INSTANCE.clearError();
-            return false;
-        }
+            String expression = entity.getExpression();
+            CharStream input = CharStreams.fromString(expression);
+            RebbDTLexer lexer = new RebbDTLexer(input);
+            CommonTokenStream tokens = new CommonTokenStream(lexer);
+            RebbDTParser parser = new RebbDTParser(tokens);
+            parser.addErrorListener(RebbDTErrorListener.INSTANCE);
+            ParseTree tree = parser.unaryTests(); // parse
 
-        Object obj = this.obj;
-        engine.setObject(obj);
+            if(RebbDTErrorListener.INSTANCE.hasError())
+            {
+                this.has_error = true;
+                this.errors.add(RebbDTErrorListener.INSTANCE.getError());
+                RebbDTErrorListener.INSTANCE.clearError();
+                return false;
+            }
 
-        engine.visit(tree);
+            Object obj = this.obj;
+            if(this.obj instanceof HashMap)
+            {
+                String exp = entity.getClause().getExpression();
+                obj = ((HashMap<String, Object>) this.obj).get(exp);
+            }
 
-        if(!engine.isValid())
-        {
-            this.has_error = true;
-            String error_message;
-            if(obj == null)
-                error_message = "rule object is null";
-            else
-                error_message = obj.toString() + " " + expression + " failed";
-            if(engine.getError() != null && !engine.getError().equals(""))
-                error_message += "(" + engine.getError() + ")";
-            this.errors.add(error_message);
-            return false;
+            engine.setObject(obj);
+
+            engine.visit(tree);
+
+            if(!engine.isValid())
+            {
+                this.has_error = true;
+                String error_message;
+                if(obj == null)
+                    error_message = "rule object is null";
+                else
+                    error_message = obj.toString() + " " + expression + " failed";
+                if(engine.getError() != null && !engine.getError().equals(""))
+                    error_message += "(" + engine.getError() + ")";
+                this.errors.add(error_message);
+                return false;
+            }
         }
         return true;
     }
 
     //TODO add output eval visitor
-    private Object evaluateRuleOutput(DecisionRuleOutput ruleOutput)
+    private Object doEvaluateRuleOutput(DecisionRuleOutputEntry ruleOutput)
     {
 //        String expression = ruleOutput.getExpression();
 //        CharStream input = CharStreams.fromString(expression);
