@@ -12,10 +12,14 @@ public class DecisionRule {
 
     private final EvalVisitor engine;
 
-    private final Object obj;
+    private Object obj;
 
     public Object getObj() {
         return obj;
+    }
+
+    public void setObj(Object obj) {
+        this.obj = obj;
     }
 
     public boolean is_match;
@@ -24,44 +28,43 @@ public class DecisionRule {
         return is_match;
     }
 
+    private boolean has_error;
+
     public boolean hasError() {
         return has_error;
     }
 
-    private boolean has_error;
+    private final List<String> errors;
 
     public List<String> getErrors() {
         return errors;
     }
 
-    private final List<String> errors;
-
-    private List<DecisionRuleInput> inputs;
+    private final List<DecisionRuleInput> inputs;
 
     public List<DecisionRuleInput> getInputs() {
         return inputs;
     }
 
-    public void setInputs(List<DecisionRuleInput> inputs) {
-        this.inputs = inputs;
+    public final DecisionRuleOutput output;
+
+    public DecisionRuleOutput getOutput() {
+        return output;
     }
+//
+//    public List<DecisionRuleOutputEntry> getOutputs() {
+//        return outputs;
+//    }
+//
+//    private List<DecisionRuleOutputEntry> outputs;
 
-    public List<DecisionRuleOutputEntry> getOutputs() {
-        return outputs;
-    }
 
-    private List<DecisionRuleOutputEntry> outputs;
-
-    public DecisionRule(Object obj) {
-        this.obj = obj;
-        this.engine = new EvalVisitor(this.obj, null);
+    public DecisionRule(List<DecisionRuleInput> inputs, DecisionRuleOutput output) {
+        this.engine = new EvalVisitor("", null);
         this.errors = new ArrayList<String>();
-    }
 
-    public DecisionRule(Object obj, List<DecisionRuleInput> inputs, List<DecisionRuleOutputEntry> outputs) {
-        this(obj);
         this.inputs = inputs;
-        this.outputs = outputs;
+        this.output = output;
     }
 
     public boolean evaluate()
@@ -78,7 +81,7 @@ public class DecisionRule {
         {
             //evaluate output value
             for (DecisionRuleOutputEntry output:
-                 this.outputs)   {
+                 this.output.getEntries())   {
                 if(!Objects.equals(output.getExpression(), ""))
                 {
                     Object value = this.doEvaluateRuleOutput(output);

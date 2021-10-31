@@ -18,19 +18,20 @@ public class DecisionRuleTest {
         input.addEntity(inputEntity);
 
         DecisionRuleOutputClause outputRank = new DecisionRuleOutputClause("Rank","",DecisionRuleOutputType.STRING);
-        DecisionRuleOutputEntry output = new DecisionRuleOutputEntry(outputRank, "A");
+        DecisionRuleOutput output = new DecisionRuleOutput("");
+        DecisionRuleOutputEntry outputEntry = new DecisionRuleOutputEntry(outputRank, "A");
+        output.addEntity(outputEntry);
 
         ArrayList<DecisionRuleInput> inputs = new ArrayList<>();
-        ArrayList<DecisionRuleOutputEntry> outputs = new ArrayList<>();
 
         inputs.add(input);
-        outputs.add(output);
 
-        DecisionRule rule = new DecisionRule(3.6, inputs, outputs);
+        DecisionRule rule = new DecisionRule(inputs, output);
+        rule.setObj(3.6);
 
         assertEquals(3.6, rule.getObj());
         assertEquals(1, rule.getInputs().size());
-        assertEquals(1, rule.getOutputs().size());
+        assertEquals(1, rule.getOutput().getEntries().size());
     }
 
     @Test
@@ -42,26 +43,29 @@ public class DecisionRuleTest {
         input.addEntity(inputEntity);
 
         DecisionRuleOutputClause outputRank = new DecisionRuleOutputClause("Rank","",DecisionRuleOutputType.STRING);
-        DecisionRuleOutputEntry output = new DecisionRuleOutputEntry(outputRank, "A");
+        DecisionRuleOutput output = new DecisionRuleOutput("");
+        DecisionRuleOutputEntry outputEntry = new DecisionRuleOutputEntry(outputRank, "A");
+        output.addEntity(outputEntry);
+
         ArrayList<DecisionRuleInput> inputs = new ArrayList<>();
         ArrayList<DecisionRuleOutputEntry> outputs = new ArrayList<>();
 
         inputs.add(input);
-        outputs.add(output);
 
-        DecisionRule rule = new DecisionRule(3.6, inputs, outputs);
+        DecisionRule rule = new DecisionRule(inputs, output);
+        rule.setObj(3.6);
 
         boolean result = rule.evaluate();
         assertTrue(result);
         assertTrue(rule.isMatch());
-        assertEquals("A", rule.getOutputs().get(0).getValue());
+        assertEquals("A", rule.getOutput().getEntries().get(0).getValue());
 
-        rule = new DecisionRule(3.0, inputs, outputs);
+        rule.setObj(3.0);
 
         result = rule.evaluate();
         assertFalse(result);
         assertFalse(rule.isMatch());
-        assertEquals("A", rule.getOutputs().get(0).getValue());
+        assertEquals("A", rule.getOutput().getEntries().get(0).getValue());
     }
 
     @Test
@@ -82,25 +86,26 @@ public class DecisionRuleTest {
 
         // output
         DecisionRuleOutputClause outputRank = new DecisionRuleOutputClause("Rank","",DecisionRuleOutputType.STRING);
-        DecisionRuleOutputEntry output = new DecisionRuleOutputEntry(outputRank, "A");
-
+        DecisionRuleOutput output = new DecisionRuleOutput("");
+        DecisionRuleOutputEntry outputEntry = new DecisionRuleOutputEntry(outputRank, "A");
+        output.addEntity(outputEntry);
 
         // rule
         ArrayList<DecisionRuleInput> inputs = new ArrayList<>();
         ArrayList<DecisionRuleOutputEntry> outputs = new ArrayList<>();
 
         inputs.add(input);
-        outputs.add(output);
 
         HashMap<String,Object> obj = new HashMap<>();
         obj.put("gpa", 3.6);
         obj.put("age", 30);
-        DecisionRule rule = new DecisionRule(obj, inputs, outputs);
+        DecisionRule rule = new DecisionRule(inputs, output);
+        rule.setObj(obj);
 
         boolean result = rule.evaluate();
         assertTrue(result);
         assertTrue(rule.isMatch());
-        assertEquals("A", rule.getOutputs().get(0).getValue());
+        assertEquals("A", rule.getOutput().getEntries().get(0).getValue());
     }
 
     @Test
@@ -112,26 +117,29 @@ public class DecisionRuleTest {
         input.addEntity(inputEntity);
 
         DecisionRuleOutputClause outputRank = new DecisionRuleOutputClause("Rank","",DecisionRuleOutputType.STRING);
-        DecisionRuleOutputEntry output = new DecisionRuleOutputEntry(outputRank, "A");
+        DecisionRuleOutput output = new DecisionRuleOutput("");
+        DecisionRuleOutputEntry outputEntry = new DecisionRuleOutputEntry(outputRank, "A");
+        output.addEntity(outputEntry);
+
         ArrayList<DecisionRuleInput> inputs = new ArrayList<>();
         ArrayList<DecisionRuleOutputEntry> outputs = new ArrayList<>();
 
         inputs.add(input);
-        outputs.add(output);
 
-        DecisionRule rule = new DecisionRule(3.6, inputs, outputs);
+        DecisionRule rule = new DecisionRule(inputs, output);
+        rule.setObj(3.6);
 
         boolean result = rule.evaluate();
         assertTrue(result);
         assertTrue(rule.isMatch());
-        assertEquals("A", rule.getOutputs().get(0).getValue());
+        assertEquals("A", rule.getOutput().getEntries().get(0).getValue());
 
-        rule = new DecisionRule(3.0, inputs, outputs);
+        rule.setObj(3.0);
 
         result = rule.evaluate();
         assertFalse(result);
         assertFalse(rule.isMatch());
-        assertEquals("A", rule.getOutputs().get(0).getValue());
+        assertEquals("A", rule.getOutput().getEntries().get(0).getValue());
     }
 
 }
