@@ -18,9 +18,9 @@ public class DecisionRuleTest {
         input.addEntity(inputEntity);
 
         DecisionRuleOutputClause outputRank = new DecisionRuleOutputClause("Rank","",DecisionRuleOutputType.STRING);
-        DecisionRuleOutput output = new DecisionRuleOutput("");
+        DecisionRuleOutput output = new DecisionRuleOutput();
         DecisionRuleOutputEntry outputEntry = new DecisionRuleOutputEntry(outputRank, "A");
-        output.addEntity(outputEntry);
+        output.addEntry(outputEntry);
 
         ArrayList<DecisionRuleInput> inputs = new ArrayList<>();
 
@@ -43,12 +43,11 @@ public class DecisionRuleTest {
         input.addEntity(inputEntity);
 
         DecisionRuleOutputClause outputRank = new DecisionRuleOutputClause("Rank","",DecisionRuleOutputType.STRING);
-        DecisionRuleOutput output = new DecisionRuleOutput("");
+        DecisionRuleOutput output = new DecisionRuleOutput();
         DecisionRuleOutputEntry outputEntry = new DecisionRuleOutputEntry(outputRank, "A");
-        output.addEntity(outputEntry);
+        output.addEntry(outputEntry);
 
         ArrayList<DecisionRuleInput> inputs = new ArrayList<>();
-        ArrayList<DecisionRuleOutputEntry> outputs = new ArrayList<>();
 
         inputs.add(input);
 
@@ -77,7 +76,7 @@ public class DecisionRuleTest {
 
         // input clause and entity 2
         DecisionRuleInputClause inputAge = new DecisionRuleInputClause("AGE","age");
-        DecisionRuleInputEntry inputEntity2 = new DecisionRuleInputEntry(inputGPA,"<35");
+        DecisionRuleInputEntry inputEntity2 = new DecisionRuleInputEntry(inputAge,"<35");
 
         // input
         DecisionRuleInput input = new DecisionRuleInput();
@@ -86,13 +85,12 @@ public class DecisionRuleTest {
 
         // output
         DecisionRuleOutputClause outputRank = new DecisionRuleOutputClause("Rank","",DecisionRuleOutputType.STRING);
-        DecisionRuleOutput output = new DecisionRuleOutput("");
+        DecisionRuleOutput output = new DecisionRuleOutput();
         DecisionRuleOutputEntry outputEntry = new DecisionRuleOutputEntry(outputRank, "A");
-        output.addEntity(outputEntry);
+        output.addEntry(outputEntry);
 
         // rule
         ArrayList<DecisionRuleInput> inputs = new ArrayList<>();
-        ArrayList<DecisionRuleOutputEntry> outputs = new ArrayList<>();
 
         inputs.add(input);
 
@@ -117,12 +115,11 @@ public class DecisionRuleTest {
         input.addEntity(inputEntity);
 
         DecisionRuleOutputClause outputRank = new DecisionRuleOutputClause("Rank","",DecisionRuleOutputType.STRING);
-        DecisionRuleOutput output = new DecisionRuleOutput("");
+        DecisionRuleOutput output = new DecisionRuleOutput();
         DecisionRuleOutputEntry outputEntry = new DecisionRuleOutputEntry(outputRank, "A");
-        output.addEntity(outputEntry);
+        output.addEntry(outputEntry);
 
         ArrayList<DecisionRuleInput> inputs = new ArrayList<>();
-        ArrayList<DecisionRuleOutputEntry> outputs = new ArrayList<>();
 
         inputs.add(input);
 

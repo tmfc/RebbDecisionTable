@@ -111,6 +111,8 @@ public class DecisionTable {
 
         this.errors = new ArrayList<>();
         this.evaluated = false;
+
+        this.outputLabel = "Result";
     }
 
     public DecisionTable(String name, Object obj)
