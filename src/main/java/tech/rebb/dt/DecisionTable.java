@@ -128,22 +128,45 @@ public class DecisionTable {
             this.errors.add("There is no rule in decision table");
         }
 
+        List<DecisionRule> matchedRules = new ArrayList<>();
+
         // evaluate rules
         for (DecisionRule rule :
                 this.rules) {
             rule.setObj(this.obj);
             boolean result = rule.evaluate();
-            // if hit policy is unique or first, means no more rule need to be evaluated
-            if((this.hitPolicy == HitPolicy.UNIQUE || this.hitPolicy == HitPolicy.FIRST)
-                && result)
+            // if hit policy is first, means no more rule need to be evaluated
+            if(this.hitPolicy == HitPolicy.FIRST && result)
             {
                 break;
+            }
+            else if(this.hitPolicy == HitPolicy.UNIQUE && result)
+            {
+                matchedRules.add(rule);
+                if(matchedRules.size() > 1)
+                {
+                    this.has_error = true;
+                    this.errors.add("More than one rule matched while hit policy is unique");
+                    break;
+                }
+            }
+            else
+            {
+                matchedRules.add(rule);
             }
         }
         this.evaluated = true;
     }
 
     public Map<String, Object> getOutput() {
+        if(!this.evaluated) {
+            this.run();
+        }
+
+        if(this.has_error)
+        {
+            return null;
+        }
 
         Map<String, Object> output = new HashMap<>();
 
@@ -153,9 +176,6 @@ public class DecisionTable {
         }
 
         List<DecisionRule> matchedRules = new ArrayList<>();
-        if(!this.evaluated) {
-            this.run();
-        }
         for (DecisionRule rule :
                 this.rules) {
             if (rule.is_match)
@@ -165,7 +185,7 @@ public class DecisionTable {
         }
 
         if(matchedRules.size() == 0)
-            return output;
+            return null;
 
         if(this.hitPolicy == HitPolicy.UNIQUE || this.hitPolicy == HitPolicy.FIRST)
         {
