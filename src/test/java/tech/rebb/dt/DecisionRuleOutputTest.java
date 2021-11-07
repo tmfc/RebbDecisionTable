@@ -7,8 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class DecisionRuleOutputTest {
 
     @Test
-    public void testConstructor()
-    {
+    public void testConstructor() throws RebbDTException {
         DecisionRuleOutputClause outputRank = new DecisionRuleOutputClause("Rank","",DecisionRuleOutputType.STRING);
         DecisionRuleOutputEntry outputEntity = new DecisionRuleOutputEntry(outputRank,"A");
 

@@ -10,7 +10,12 @@ public class DecisionRuleInputTest {
     public void testConstructor()
     {
         DecisionRuleInputClause inputGPA = new DecisionRuleInputClause("GPA","gpa");
-        DecisionRuleInputEntry inputEntity = new DecisionRuleInputEntry(inputGPA,">3.5");
+        DecisionRuleInputEntry inputEntity = null;
+        try {
+            inputEntity = new DecisionRuleInputEntry(inputGPA,">3.5");
+        } catch (RebbDTException e) {
+            e.printStackTrace();
+        }
 
         DecisionRuleInput input = new DecisionRuleInput();
         input.addEntry(inputEntity);

@@ -78,8 +78,7 @@ public class DecisionRule {
         this.annotation = annotation;
     }
 
-    public boolean evaluate()
-    {
+    public boolean evaluate() throws RebbDTException {
         boolean result = true;
         // evaluate every rule
         for (DecisionRuleInput input:

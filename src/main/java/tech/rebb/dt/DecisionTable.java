@@ -162,7 +162,13 @@ public class DecisionTable {
         for (DecisionRule rule :
                 this.rules) {
             rule.setObj(this.obj);
-            boolean result = rule.evaluate();
+            boolean result = false;
+            try {
+                result = rule.evaluate();
+            } catch (RebbDTException e) {
+//                e.printStackTrace();
+               //TODO: handle exception
+            }
 
             if(!result)
                 continue;

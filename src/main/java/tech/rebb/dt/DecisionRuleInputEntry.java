@@ -1,5 +1,7 @@
 package tech.rebb.dt;
 
+import java.util.List;
+
 public class DecisionRuleInputEntry {
 
     private final DecisionRuleInputClause clause;
@@ -14,7 +16,17 @@ public class DecisionRuleInputEntry {
         return expression;
     }
 
-    public DecisionRuleInputEntry(DecisionRuleInputClause clause, String expression) {
+    public DecisionRuleInputEntry(DecisionRuleInputClause clause, String expression) throws RebbDTException {
+        if(clause == null)
+            throw new RebbDTException("Rule input clause should not be null");
+
+        // Check allowed value
+        if(clause.getAllowedValues() != null){
+            List<String> allowedValues = clause.getAllowedValues();
+            if(!allowedValues.contains(expression))
+                throw new RebbDTException("Expression (" + expression + ") not in allowed value list(" + String.join(", ", allowedValues) + ")");
+        }
+
         this.clause = clause;
         this.expression = expression;
     }

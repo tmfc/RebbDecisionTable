@@ -10,8 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class DecisionRuleTest {
 
     @Test
-    public void testConstructor()
-    {
+    public void testConstructor() throws RebbDTException {
         DecisionRuleInputClause inputGPA = new DecisionRuleInputClause("GPA","gpa");
         DecisionRuleInput input = new DecisionRuleInput();
         DecisionRuleInputEntry inputEntity = new DecisionRuleInputEntry(inputGPA,">3.5");
@@ -35,8 +34,7 @@ public class DecisionRuleTest {
     }
 
     @Test
-    public void testSingleInputEntity()
-    {
+    public void testSingleInputEntity() throws RebbDTException {
         DecisionRuleInputClause inputGPA = new DecisionRuleInputClause("GPA","gpa");
         DecisionRuleInput input = new DecisionRuleInput();
         DecisionRuleInputEntry inputEntity = new DecisionRuleInputEntry(inputGPA,">3.5");
@@ -68,8 +66,7 @@ public class DecisionRuleTest {
     }
 
     @Test
-    public void testMultiplyInputEntity()
-    {
+    public void testMultiplyInputEntity() throws RebbDTException {
         // input clause and entity 1
         DecisionRuleInputClause inputGPA = new DecisionRuleInputClause("GPA","gpa");
         DecisionRuleInputEntry inputEntity1 = new DecisionRuleInputEntry(inputGPA,">3.5");
@@ -107,8 +104,7 @@ public class DecisionRuleTest {
     }
 
     @Test
-    public void testMultiplyOutputEntity()
-    {
+    public void testMultiplyOutputEntity() throws RebbDTException {
         DecisionRuleInputClause inputGPA = new DecisionRuleInputClause("GPA","gpa");
         DecisionRuleInput input = new DecisionRuleInput();
         DecisionRuleInputEntry inputEntity = new DecisionRuleInputEntry(inputGPA,">3.5");
