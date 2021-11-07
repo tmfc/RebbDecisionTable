@@ -100,8 +100,9 @@ public class DecisionRule {
                     output.setValue(value);
                 }
             }
-            this.is_match = true;
+
         }
+        this.is_match = result;
         return result;
     }
 

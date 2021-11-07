@@ -1,7 +1,5 @@
 package tech.rebb.dt;
 
-import apple.laf.JRSUIConstants;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -97,6 +95,19 @@ public class DecisionTable {
                 this.outputClauses.add(outputEntry.getClause());
             }
         }
+
+        if(rule.getAnnotation() != null)
+        {
+            if(this.annotationClauses == null)
+                this.annotationClauses = new ArrayList<>();
+            if(this.annotationClauses.size() == 0)
+            {
+                for (DecisionRuleAnnotationEntry annotationEntry :
+                        rule.getAnnotation().getEntries()) {
+                    this.annotationClauses.add(annotationEntry.getClause());
+                }
+            }
+        }
     }
 
     private String outputLabel;
@@ -109,6 +120,16 @@ public class DecisionTable {
         this.outputLabel = outputLabel;
     }
 
+    private String annotationLabel;
+
+    public String getAnnotationLabel() {
+        return annotationLabel;
+    }
+
+    public void setAnnotationLabel(String annotationLabel) {
+        this.annotationLabel = annotationLabel;
+    }
+
     public DecisionTable(String name, Object obj, HitPolicy hitPolicy, BuildInAggregation aggregation) {
         this.name = name;
         this.obj = obj;
@@ -119,6 +140,7 @@ public class DecisionTable {
         this.evaluated = false;
 
         this.outputLabel = "Result";
+        this.annotationLabel = "Annotation";
     }
 
     public DecisionTable(String name, Object obj)
@@ -141,12 +163,16 @@ public class DecisionTable {
                 this.rules) {
             rule.setObj(this.obj);
             boolean result = rule.evaluate();
+
+            if(!result)
+                continue;
+
             // if hit policy is first, means no more rule need to be evaluated
-            if(this.hitPolicy == HitPolicy.FIRST && result)
+            if(this.hitPolicy == HitPolicy.FIRST)
             {
                 break;
             }
-            else if(this.hitPolicy == HitPolicy.UNIQUE && result)
+            else if(this.hitPolicy == HitPolicy.UNIQUE)
             {
                 matchedRules.add(rule);
                 if(matchedRules.size() > 1)
@@ -204,9 +230,82 @@ public class DecisionTable {
 
                 for (DecisionRuleOutputEntry outputEntry :
                         ruleOutputEntries) {
-                    result.put(outputEntry.getClause().getName(), outputEntry.getValue());
+                    result.put(outputEntry.getName(), outputEntry.getValue());
                 }
                 output.put(this.outputLabel, result);
+            }
+        }
+        //TODO: process other hit policies
+        else if(this.hitPolicy == HitPolicy.ANY)
+        {
+            //TODO: all output should be equal, if not return false;
+        }
+        else if(this.hitPolicy == HitPolicy.PRIORITY)
+        {
+            //TODO: sort matched rules by output priority,then return first
+        }
+        //multiple hit policies O R C
+        else if(this.hitPolicy == HitPolicy.OUTPUT_ORDER)
+        {
+
+        }
+        else if(this.hitPolicy == HitPolicy.RULE_ORDER)
+        {
+
+        }
+        else if(this.hitPolicy == HitPolicy.COLLECT)
+        {
+
+        }
+
+
+        return output;
+    }
+
+    public Map<String, Object> getOutputAnnotation() {
+        if(!this.evaluated) {
+            this.run();
+        }
+
+        if(this.has_error)
+            return null;
+
+        if(this.annotationClauses == null)
+            return null;
+
+        Map<String, Object> annotationResult = new HashMap<>();
+
+        boolean singleAnnotationResult = false;
+        if(this.annotationClauses.size() == 1) {
+            singleAnnotationResult = true;
+        }
+
+        List<DecisionRule> matchedRules = new ArrayList<>();
+        for (DecisionRule rule :
+                this.rules) {
+            if (rule.is_match)
+            {
+                matchedRules.add(rule);
+            }
+        }
+
+        if(matchedRules.size() == 0)
+            return null;
+
+        //single hit policies,U A P F
+        if(this.hitPolicy == HitPolicy.UNIQUE || this.hitPolicy == HitPolicy.FIRST)
+        {
+            List<DecisionRuleAnnotationEntry> ruleAnnotationEntries = matchedRules.get(0).getAnnotation().getEntries();
+            if(singleAnnotationResult)
+                annotationResult.put(ruleAnnotationEntries.get(0).getName(), ruleAnnotationEntries.get(0).getValue());
+            else{
+                Map<String, Object> result = new HashMap<>();
+
+                for (DecisionRuleAnnotationEntry annotationEntry :
+                        ruleAnnotationEntries) {
+                    result.put(annotationEntry.getName(), annotationEntry.getValue());
+                }
+                annotationResult.put(this.annotationLabel, result);
             }
         }
         else if(this.hitPolicy == HitPolicy.ANY)
@@ -230,8 +329,7 @@ public class DecisionTable {
         {
 
         }
-        //TODO: process other hit policies
 
-        return output;
+        return annotationResult;
     }
 }

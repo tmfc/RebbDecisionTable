@@ -21,4 +21,8 @@ public class DecisionRuleAnnotationEntry {
         this.clause = clause;
         this.value = value;
     }
+
+    public String getName() {
+        return this.clause.getName();
+    }
 }

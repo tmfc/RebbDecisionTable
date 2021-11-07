@@ -22,8 +22,12 @@ public class DecisionRuleOutputEntry {
         this.value = value;
     }
 
+
     public String getExpression() {
         return this.clause.getExpression();
+    }
+    public String getName() {
+        return this.clause.getName();
     }
 
 }
