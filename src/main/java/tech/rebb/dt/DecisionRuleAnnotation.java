@@ -27,4 +27,14 @@ public class DecisionRuleAnnotation {
         }
         return this.entries.add(entry);
     }
+
+    public String getSignature() {
+        StringBuilder strToHash = new StringBuilder();
+        for (DecisionRuleAnnotationEntry e:
+                this.entries) {
+            strToHash.append(e.getSignature());
+        }
+
+        return Helper.sign(strToHash.toString());
+    }
 }

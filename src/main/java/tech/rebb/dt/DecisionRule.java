@@ -78,6 +78,14 @@ public class DecisionRule {
         this.annotation = annotation;
     }
 
+    public String getSignature() {
+        String strToHash = this.input.getSignature() + this.output.getSignature();
+        if(this.annotation != null)
+            return Helper.sign(strToHash + this.annotation.getSignature());
+        else
+            return Helper.sign(strToHash);
+    }
+
     public boolean evaluate() throws RebbDTException {
         boolean result = true;
         // evaluate rule

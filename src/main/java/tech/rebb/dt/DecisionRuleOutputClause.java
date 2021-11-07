@@ -56,7 +56,6 @@ public class DecisionRuleOutputClause {
         this.type = type;
         this.allowedValues = allowedValues;
 
-        String hash = null;
         String strToHash = this.name + this.expression + this.type.toString();
         if(this.allowedValues != null)
             strToHash = this.name + this.expression + this.type + this.allowedValues;

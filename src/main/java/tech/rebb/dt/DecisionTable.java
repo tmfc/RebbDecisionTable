@@ -81,11 +81,24 @@ public class DecisionTable {
 //        this.rules = rules;
 //    }
 
-    public void addRule(DecisionRule rule)
+    public boolean addRule(DecisionRule rule)
     {
+        if(rule == null)
+            return false;
+
         if(this.rules == null)
             this.rules = new ArrayList<>();
+
+        for (DecisionRule r:
+                this.rules) {
+            // Check duplicated rule
+            if(r.getSignature().equals(rule.getSignature()))
+                return false;
+        }
+
         this.rules.add(rule);
+
+        // get output clause list
         if(this.outputClauses == null)
             this.outputClauses = new ArrayList<>();
         if(this.outputClauses.size() == 0)
@@ -96,6 +109,7 @@ public class DecisionTable {
             }
         }
 
+        // get annotation clause list
         if(rule.getAnnotation() != null)
         {
             if(this.annotationClauses == null)
@@ -108,6 +122,8 @@ public class DecisionTable {
                 }
             }
         }
+
+        return true;
     }
 
     private String outputLabel;

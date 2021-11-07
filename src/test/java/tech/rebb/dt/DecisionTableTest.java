@@ -57,6 +57,30 @@ public class DecisionTableTest {
     }
 
     @Test
+    public void testDuplicatedRule() throws RebbDTException {
+        DecisionRuleInputClause inputGPA = new DecisionRuleInputClause("GPA","gpa");
+        DecisionRuleInput input = new DecisionRuleInput();
+        DecisionRuleInputEntry inputEntity = new DecisionRuleInputEntry(inputGPA,">3.5");
+        input.addEntry(inputEntity);
+
+        DecisionRuleOutputClause outputRank = new DecisionRuleOutputClause("Rank","",DecisionRuleOutputType.STRING);
+        DecisionRuleOutput output = new DecisionRuleOutput();
+        DecisionRuleOutputEntry outputEntry = new DecisionRuleOutputEntry(outputRank, "A");
+        output.addEntry(outputEntry);
+
+        DecisionRule rule1 = new DecisionRule(input, output);
+
+        DecisionTable dt = new DecisionTable("Test Decision Table", 3.6);
+        boolean result = dt.addRule(rule1);
+        assertTrue(result);
+
+        result = dt.addRule(rule1);
+        assertFalse(result);
+
+        assertEquals(1, dt.getRules().size());
+    }
+
+    @Test
     public void testMultipleRules() throws RebbDTException {
         DecisionRuleInputClause inputGPA = new DecisionRuleInputClause("GPA","gpa");
         DecisionRuleInput input1 = new DecisionRuleInput();
