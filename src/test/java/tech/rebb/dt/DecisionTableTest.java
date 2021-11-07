@@ -21,12 +21,7 @@ public class DecisionTableTest {
         DecisionRuleOutputEntry outputEntry = new DecisionRuleOutputEntry(outputRank, "A");
         output.addEntry(outputEntry);
 
-
-        ArrayList<DecisionRuleInput> inputs = new ArrayList<>();
-
-        inputs.add(input);
-
-        DecisionRule rule1 = new DecisionRule(inputs, output);
+        DecisionRule rule1 = new DecisionRule(input, output);
 
         DecisionTable dt = new DecisionTable("Test Decision Table", 3.6);
         dt.addRule(rule1);
@@ -49,11 +44,7 @@ public class DecisionTableTest {
         DecisionRuleOutputEntry outputEntry = new DecisionRuleOutputEntry(outputRank, "A");
         output.addEntry(outputEntry);
 
-        ArrayList<DecisionRuleInput> inputs = new ArrayList<>();
-
-        inputs.add(input);
-
-        DecisionRule rule1 = new DecisionRule(inputs, output);
+        DecisionRule rule1 = new DecisionRule(input, output);
 
         DecisionTable dt = new DecisionTable("Test Decision Table", 3.6);
         dt.addRule(rule1);
@@ -78,11 +69,7 @@ public class DecisionTableTest {
         DecisionRuleOutputEntry outputEntry = new DecisionRuleOutputEntry(outputRank, "A");
         output.addEntry(outputEntry);
 
-        ArrayList<DecisionRuleInput> inputs = new ArrayList<>();
-
-        inputs.add(input1);
-
-        DecisionRule rule1 = new DecisionRule(inputs, output);
+        DecisionRule rule1 = new DecisionRule(input1, output);
 
         DecisionRuleInput input2 = new DecisionRuleInput();
         DecisionRuleInputEntry inputEntity2 = new DecisionRuleInputEntry(inputGPA,">3.0 and <=3.5");
@@ -92,11 +79,7 @@ public class DecisionTableTest {
         DecisionRuleOutputEntry outputEntity2 = new DecisionRuleOutputEntry(outputRank, "B");
         output2.addEntry(outputEntity2);
 
-        inputs = new ArrayList<>();
-
-        inputs.add(input2);
-
-        DecisionRule rule2 = new DecisionRule(inputs, output2);
+        DecisionRule rule2 = new DecisionRule(input2, output2);
 
         DecisionTable dt = new DecisionTable("Test Decision Table", 3.1);
         dt.addRule(rule1);
@@ -125,11 +108,7 @@ public class DecisionTableTest {
         output.addEntry(outputEntryRank);
         output.addEntry(outputEntryScore);
 
-        ArrayList<DecisionRuleInput> inputs = new ArrayList<>();
-
-        inputs.add(input1);
-
-        DecisionRule rule1 = new DecisionRule(inputs, output);
+        DecisionRule rule1 = new DecisionRule(input1, output);
 
         DecisionRuleInput input2 = new DecisionRuleInput();
         DecisionRuleInputEntry inputEntity2 = new DecisionRuleInputEntry(inputGPA,">3.0 and <=3.5");
@@ -141,11 +120,7 @@ public class DecisionTableTest {
         output2.addEntry(outputEntryRank2);
         output2.addEntry(outputEntryScore2);
 
-        inputs = new ArrayList<>();
-
-        inputs.add(input2);
-
-        DecisionRule rule2 = new DecisionRule(inputs, output);
+        DecisionRule rule2 = new DecisionRule(input2, output);
 
         DecisionTable dt = new DecisionTable("Test Decision Table", 3.1);
         dt.addRule(rule1);
@@ -177,11 +152,7 @@ public class DecisionTableTest {
         DecisionRuleAnnotationEntry annotationEntry = new DecisionRuleAnnotationEntry(annotationRemark, "Excellent");
         annotation.addEntry(annotationEntry);
 
-        ArrayList<DecisionRuleInput> inputs = new ArrayList<>();
-
-        inputs.add(input);
-
-        DecisionRule rule1 = new DecisionRule(inputs, output, annotation);
+        DecisionRule rule1 = new DecisionRule(input, output, annotation);
 
         DecisionTable dt = new DecisionTable("Test Decision Table", 3.6);
         dt.addRule(rule1);
@@ -218,11 +189,7 @@ public class DecisionTableTest {
         annotation.addEntry(annotationEntryRemark);
         annotation.addEntry(annotationEntryNote);
 
-        ArrayList<DecisionRuleInput> inputs = new ArrayList<>();
-
-        inputs.add(input1);
-
-        DecisionRule rule1 = new DecisionRule(inputs, output);
+        DecisionRule rule1 = new DecisionRule(input1, output);
 
         DecisionRuleInput input2 = new DecisionRuleInput();
         DecisionRuleInputEntry inputEntity2 = new DecisionRuleInputEntry(inputGPA,">3.0 and <=3.5");
@@ -234,11 +201,7 @@ public class DecisionTableTest {
         output2.addEntry(outputEntryRank2);
         output2.addEntry(outputEntryScore2);
 
-        inputs = new ArrayList<>();
-
-        inputs.add(input2);
-
-        DecisionRule rule2 = new DecisionRule(inputs, output, annotation);
+        DecisionRule rule2 = new DecisionRule(input2, output, annotation);
 
         DecisionTable dt = new DecisionTable("Test Decision Table", 3.1);
         dt.addRule(rule1);

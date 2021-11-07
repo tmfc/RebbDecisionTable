@@ -40,10 +40,10 @@ public class DecisionRule {
         return errors;
     }
 
-    private final List<DecisionRuleInput> inputs;
+    private final DecisionRuleInput input;
 
-    public List<DecisionRuleInput> getInputs() {
-        return inputs;
+    public DecisionRuleInput getInputs() {
+        return input;
     }
 
     public final DecisionRuleOutput output;
@@ -65,27 +65,24 @@ public class DecisionRule {
 //    private List<DecisionRuleOutputEntry> outputs;
 
 
-    public DecisionRule(List<DecisionRuleInput> inputs, DecisionRuleOutput output) {
-        this(inputs, output, null);
+    public DecisionRule(DecisionRuleInput input, DecisionRuleOutput output) {
+        this(input, output, null);
     }
 
-    public DecisionRule(List<DecisionRuleInput> inputs, DecisionRuleOutput output, DecisionRuleAnnotation annotation) {
+    public DecisionRule(DecisionRuleInput input, DecisionRuleOutput output, DecisionRuleAnnotation annotation) {
         this.engine = new EvalVisitor("", null);
         this.errors = new ArrayList<String>();
 
-        this.inputs = inputs;
+        this.input = input;
         this.output = output;
         this.annotation = annotation;
     }
 
     public boolean evaluate() throws RebbDTException {
         boolean result = true;
-        // evaluate every rule
-        for (DecisionRuleInput input:
-             this.inputs) {
-            boolean ruleResult = this.doEvaluateRuleInput(input);
-            result = result && ruleResult;
-        }
+        // evaluate rule
+        result = this.doEvaluateRuleInput(input);
+
         // rule satisfied
         if(result)
         {

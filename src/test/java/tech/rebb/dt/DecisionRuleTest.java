@@ -21,15 +21,10 @@ public class DecisionRuleTest {
         DecisionRuleOutputEntry outputEntry = new DecisionRuleOutputEntry(outputRank, "A");
         output.addEntry(outputEntry);
 
-        ArrayList<DecisionRuleInput> inputs = new ArrayList<>();
-
-        inputs.add(input);
-
-        DecisionRule rule = new DecisionRule(inputs, output);
+        DecisionRule rule = new DecisionRule(input, output);
         rule.setObj(3.6);
 
         assertEquals(3.6, rule.getObj());
-        assertEquals(1, rule.getInputs().size());
         assertEquals(1, rule.getOutput().getEntries().size());
     }
 
@@ -45,11 +40,7 @@ public class DecisionRuleTest {
         DecisionRuleOutputEntry outputEntry = new DecisionRuleOutputEntry(outputRank, "A");
         output.addEntry(outputEntry);
 
-        ArrayList<DecisionRuleInput> inputs = new ArrayList<>();
-
-        inputs.add(input);
-
-        DecisionRule rule = new DecisionRule(inputs, output);
+        DecisionRule rule = new DecisionRule(input, output);
         rule.setObj(3.6);
 
         boolean result = rule.evaluate();
@@ -87,14 +78,10 @@ public class DecisionRuleTest {
         output.addEntry(outputEntry);
 
         // rule
-        ArrayList<DecisionRuleInput> inputs = new ArrayList<>();
-
-        inputs.add(input);
-
         HashMap<String,Object> obj = new HashMap<>();
         obj.put("gpa", 3.6);
         obj.put("age", 30);
-        DecisionRule rule = new DecisionRule(inputs, output);
+        DecisionRule rule = new DecisionRule(input, output);
         rule.setObj(obj);
 
         boolean result = rule.evaluate();
@@ -115,11 +102,7 @@ public class DecisionRuleTest {
         DecisionRuleOutputEntry outputEntry = new DecisionRuleOutputEntry(outputRank, "A");
         output.addEntry(outputEntry);
 
-        ArrayList<DecisionRuleInput> inputs = new ArrayList<>();
-
-        inputs.add(input);
-
-        DecisionRule rule = new DecisionRule(inputs, output);
+        DecisionRule rule = new DecisionRule(input, output);
         rule.setObj(3.6);
 
         boolean result = rule.evaluate();
