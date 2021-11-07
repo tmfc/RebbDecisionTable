@@ -1,5 +1,8 @@
 package tech.rebb.dt;
 
+import javax.xml.bind.DatatypeConverter;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 public class DecisionRuleOutputClause {
@@ -37,6 +40,12 @@ public class DecisionRuleOutputClause {
         this.defaultValue = defaultValue;
     }
 
+    private final String signature;
+
+    public String getSignature() {
+        return signature;
+    }
+
     public DecisionRuleOutputClause(String name, String expression, DecisionRuleOutputType type) {
         this(name, expression, type, null);
     }
@@ -46,5 +55,20 @@ public class DecisionRuleOutputClause {
         this.expression = expression;
         this.type = type;
         this.allowedValues = allowedValues;
+
+        String hash = null;
+        String strToHash = this.name + this.expression + this.type.toString();
+        if(this.allowedValues != null)
+            strToHash = this.name + this.expression + this.type + this.allowedValues;
+
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            md.update(strToHash.getBytes());
+            byte[] digest = md.digest();
+            hash = DatatypeConverter.printHexBinary(digest).toUpperCase();
+        } catch (NoSuchAlgorithmException e) {
+            hash = strToHash;
+        }
+        this.signature = hash;
     }
 }

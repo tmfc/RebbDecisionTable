@@ -45,7 +45,7 @@ public class DecisionRuleInputClause {
         String hash = null;
         String strToHash = this.name + this.expression;
         if(this.allowedValues != null)
-            strToHash = this.name + this.expression + this.allowedValues.toString();
+            strToHash = this.name + this.expression + this.allowedValues;
 
         try {
             MessageDigest md = MessageDigest.getInstance("MD5");
