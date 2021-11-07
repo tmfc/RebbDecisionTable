@@ -61,14 +61,6 @@ public class DecisionRuleOutputClause {
         if(this.allowedValues != null)
             strToHash = this.name + this.expression + this.type + this.allowedValues;
 
-        try {
-            MessageDigest md = MessageDigest.getInstance("MD5");
-            md.update(strToHash.getBytes());
-            byte[] digest = md.digest();
-            hash = DatatypeConverter.printHexBinary(digest).toUpperCase();
-        } catch (NoSuchAlgorithmException e) {
-            hash = strToHash;
-        }
-        this.signature = hash;
+        this.signature = Helper.sign(strToHash);
     }
 }

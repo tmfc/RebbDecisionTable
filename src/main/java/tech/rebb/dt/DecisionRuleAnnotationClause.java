@@ -19,16 +19,7 @@ public class DecisionRuleAnnotationClause {
 
     public DecisionRuleAnnotationClause(String name) {
         this.name = name;
-        String hash = null;
-        String strToHash = this.name;
-        try {
-            MessageDigest md = MessageDigest.getInstance("MD5");
-            md.update(strToHash.getBytes());
-            byte[] digest = md.digest();
-            hash = DatatypeConverter.printHexBinary(digest).toUpperCase();
-        } catch (NoSuchAlgorithmException e) {
-            hash = strToHash;
-        }
-        this.signature = hash;
+
+        this.signature = Helper.sign(this.name);
     }
 }
