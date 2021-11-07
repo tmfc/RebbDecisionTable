@@ -7,8 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class DecisionRuleAnnotationTest {
 
     @Test
-    public void testConstructor()
-    {
+    public void testConstructor() throws RebbDTException {
         DecisionRuleAnnotationClause annotationRemark = new DecisionRuleAnnotationClause("Remark");
         DecisionRuleAnnotationEntry annotationEntity = new DecisionRuleAnnotationEntry(annotationRemark, "Excellent");
 

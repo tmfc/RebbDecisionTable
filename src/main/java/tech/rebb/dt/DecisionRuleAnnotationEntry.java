@@ -17,7 +17,10 @@ public class DecisionRuleAnnotationEntry {
         return value;
     }
 
-    public DecisionRuleAnnotationEntry(DecisionRuleAnnotationClause clause, Object value) {
+    public DecisionRuleAnnotationEntry(DecisionRuleAnnotationClause clause, Object value) throws RebbDTException {
+        if(clause == null)
+            throw new RebbDTException("Rule annotation clause should not be null");
+
         this.clause = clause;
         this.value = value;
     }

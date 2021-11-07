@@ -52,7 +52,12 @@ public class DecisionRuleOutputEntryTest {
 
     @Test
     public void testSetValueThrowException() throws RebbDTException {
-        DecisionRuleOutputClause outputRank = new DecisionRuleOutputClause("Rank","",DecisionRuleOutputType.STRING);
+        List<String> allowedValues = new ArrayList<>();
+        allowedValues.add("A");
+        allowedValues.add("B");
+        allowedValues.add("C");
+
+        DecisionRuleOutputClause outputRank = new DecisionRuleOutputClause("Rank","",DecisionRuleOutputType.STRING, allowedValues);
 
         DecisionRuleOutputEntry output = new DecisionRuleOutputEntry(outputRank, "A");
 
