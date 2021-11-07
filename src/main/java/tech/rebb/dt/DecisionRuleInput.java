@@ -16,6 +16,13 @@ public class DecisionRuleInput {
     }
 
     public boolean addEntry(DecisionRuleInputEntry entry) {
+        // Check duplicated entry
+        for (DecisionRuleInputEntry e:
+             this.entries) {
+            if(e.getSignature().equals(entry.getSignature()))
+                return false;
+        }
+
         return this.entries.add(entry);
     }
 }
