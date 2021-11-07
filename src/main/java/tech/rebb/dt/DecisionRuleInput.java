@@ -15,7 +15,7 @@ public class DecisionRuleInput {
         this.entries = new ArrayList<>();
     }
 
-    public void addEntity(DecisionRuleInputEntry entry) {
+    public void addEntry(DecisionRuleInputEntry entry) {
         this.entries.add(entry);
     }
 }

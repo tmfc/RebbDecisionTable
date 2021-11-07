@@ -13,7 +13,7 @@ public class DecisionRuleInputTest {
         DecisionRuleInputEntry inputEntity = new DecisionRuleInputEntry(inputGPA,">3.5");
 
         DecisionRuleInput input = new DecisionRuleInput();
-        input.addEntity(inputEntity);
+        input.addEntry(inputEntity);
 
         assertEquals("GPA",input.getEntries().get(0).getClause().getName());
         assertEquals("gpa",input.getEntries().get(0).getClause().getExpression());

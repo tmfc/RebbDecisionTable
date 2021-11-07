@@ -15,7 +15,7 @@ public class DecisionTableTest {
         DecisionRuleInputClause inputGPA = new DecisionRuleInputClause("GPA","gpa");
         DecisionRuleInput input = new DecisionRuleInput();
         DecisionRuleInputEntry inputEntity = new DecisionRuleInputEntry(inputGPA,">3.5");
-        input.addEntity(inputEntity);
+        input.addEntry(inputEntity);
 
         DecisionRuleOutputClause outputRank = new DecisionRuleOutputClause("Rank","",DecisionRuleOutputType.STRING);
         DecisionRuleOutput output = new DecisionRuleOutput();
@@ -44,7 +44,7 @@ public class DecisionTableTest {
         DecisionRuleInputClause inputGPA = new DecisionRuleInputClause("GPA","gpa");
         DecisionRuleInput input = new DecisionRuleInput();
         DecisionRuleInputEntry inputEntity = new DecisionRuleInputEntry(inputGPA,">3.5");
-        input.addEntity(inputEntity);
+        input.addEntry(inputEntity);
 
         DecisionRuleOutputClause outputRank = new DecisionRuleOutputClause("Rank","",DecisionRuleOutputType.STRING);
         DecisionRuleOutput output = new DecisionRuleOutput();
@@ -73,7 +73,7 @@ public class DecisionTableTest {
         DecisionRuleInputClause inputGPA = new DecisionRuleInputClause("GPA","gpa");
         DecisionRuleInput input1 = new DecisionRuleInput();
         DecisionRuleInputEntry inputEntity1 = new DecisionRuleInputEntry(inputGPA,">3.5");
-        input1.addEntity(inputEntity1);
+        input1.addEntry(inputEntity1);
 
 
         DecisionRuleOutputClause outputRank = new DecisionRuleOutputClause("Rank","",DecisionRuleOutputType.STRING);
@@ -89,7 +89,7 @@ public class DecisionTableTest {
 
         DecisionRuleInput input2 = new DecisionRuleInput();
         DecisionRuleInputEntry inputEntity2 = new DecisionRuleInputEntry(inputGPA,">3.0");
-        input2.addEntity(inputEntity2);
+        input2.addEntry(inputEntity2);
 
         DecisionRuleOutput output2 = new DecisionRuleOutput();
         DecisionRuleOutputEntry outputEntity2 = new DecisionRuleOutputEntry(outputRank, "B");
@@ -119,7 +119,7 @@ public class DecisionTableTest {
         DecisionRuleInputClause inputGPA = new DecisionRuleInputClause("GPA","gpa");
         DecisionRuleInput input1 = new DecisionRuleInput();
         DecisionRuleInputEntry inputEntity1 = new DecisionRuleInputEntry(inputGPA,">3.5");
-        input1.addEntity(inputEntity1);
+        input1.addEntry(inputEntity1);
 
         DecisionRuleOutputClause outputRank = new DecisionRuleOutputClause("Rank","",DecisionRuleOutputType.STRING);
         DecisionRuleOutputClause outputScore = new DecisionRuleOutputClause("Score","",DecisionRuleOutputType.NUMBER);
@@ -138,7 +138,7 @@ public class DecisionTableTest {
 
         DecisionRuleInput input2 = new DecisionRuleInput();
         DecisionRuleInputEntry inputEntity2 = new DecisionRuleInputEntry(inputGPA,">3.0");
-        input2.addEntity(inputEntity2);
+        input2.addEntry(inputEntity2);
 
         DecisionRuleOutput output2 = new DecisionRuleOutput();
         DecisionRuleOutputEntry outputEntryRank2 = new DecisionRuleOutputEntry(outputRank, "B");

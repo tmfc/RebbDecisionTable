@@ -15,7 +15,7 @@ public class DecisionRuleTest {
         DecisionRuleInputClause inputGPA = new DecisionRuleInputClause("GPA","gpa");
         DecisionRuleInput input = new DecisionRuleInput();
         DecisionRuleInputEntry inputEntity = new DecisionRuleInputEntry(inputGPA,">3.5");
-        input.addEntity(inputEntity);
+        input.addEntry(inputEntity);
 
         DecisionRuleOutputClause outputRank = new DecisionRuleOutputClause("Rank","",DecisionRuleOutputType.STRING);
         DecisionRuleOutput output = new DecisionRuleOutput();
@@ -40,7 +40,7 @@ public class DecisionRuleTest {
         DecisionRuleInputClause inputGPA = new DecisionRuleInputClause("GPA","gpa");
         DecisionRuleInput input = new DecisionRuleInput();
         DecisionRuleInputEntry inputEntity = new DecisionRuleInputEntry(inputGPA,">3.5");
-        input.addEntity(inputEntity);
+        input.addEntry(inputEntity);
 
         DecisionRuleOutputClause outputRank = new DecisionRuleOutputClause("Rank","",DecisionRuleOutputType.STRING);
         DecisionRuleOutput output = new DecisionRuleOutput();
@@ -80,8 +80,8 @@ public class DecisionRuleTest {
 
         // input
         DecisionRuleInput input = new DecisionRuleInput();
-        input.addEntity(inputEntity1);
-        input.addEntity(inputEntity2);
+        input.addEntry(inputEntity1);
+        input.addEntry(inputEntity2);
 
         // output
         DecisionRuleOutputClause outputRank = new DecisionRuleOutputClause("Rank","",DecisionRuleOutputType.STRING);
@@ -112,7 +112,7 @@ public class DecisionRuleTest {
         DecisionRuleInputClause inputGPA = new DecisionRuleInputClause("GPA","gpa");
         DecisionRuleInput input = new DecisionRuleInput();
         DecisionRuleInputEntry inputEntity = new DecisionRuleInputEntry(inputGPA,">3.5");
-        input.addEntity(inputEntity);
+        input.addEntry(inputEntity);
 
         DecisionRuleOutputClause outputRank = new DecisionRuleOutputClause("Rank","",DecisionRuleOutputType.STRING);
         DecisionRuleOutput output = new DecisionRuleOutput();
