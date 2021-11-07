@@ -187,6 +187,7 @@ public class DecisionTable {
         if(matchedRules.size() == 0)
             return null;
 
+        //single hit policies,U A P F
         if(this.hitPolicy == HitPolicy.UNIQUE || this.hitPolicy == HitPolicy.FIRST)
         {
             List<DecisionRuleOutputEntry> ruleOutputEntries = matchedRules.get(0).getOutput().getEntries();
@@ -201,6 +202,27 @@ public class DecisionTable {
                 }
                 output.put(this.outputLabel, result);
             }
+        }
+        else if(this.hitPolicy == HitPolicy.ANY)
+        {
+            //TODO: all output should be equal, if not return false;
+        }
+        else if(this.hitPolicy == HitPolicy.PRIORITY)
+        {
+            //TODO: sort matched rules by output priority,then return first
+        }
+        //multiple hit policies O R C
+        else if(this.hitPolicy == HitPolicy.OUTPUT_ORDER)
+        {
+
+        }
+        else if(this.hitPolicy == HitPolicy.RULE_ORDER)
+        {
+
+        }
+        else if(this.hitPolicy == HitPolicy.COLLECT)
+        {
+
         }
         //TODO: process other hit policies
 
