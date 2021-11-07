@@ -14,6 +14,7 @@ public class DecisionRuleAnnotationEntryTest {
         DecisionRuleAnnotationEntry annotationEntity = new DecisionRuleAnnotationEntry(annotationRemark, "Excellent");
         assertEquals("Remark",annotationEntity.getClause().getName());
         assertEquals("Excellent",annotationEntity.getValue());
+        assertEquals("5D2E271D69F12C3EFDD106E64EB07E07",annotationEntity.getSignature());
     }
 
     @Test

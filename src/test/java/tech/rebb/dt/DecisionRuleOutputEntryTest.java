@@ -15,9 +15,10 @@ public class DecisionRuleOutputEntryTest {
         DecisionRuleOutputClause outputRank = new DecisionRuleOutputClause("Rank","",DecisionRuleOutputType.STRING);
 
         DecisionRuleOutputEntry outputEntry = new DecisionRuleOutputEntry(outputRank, "A");
-        assertEquals("Rank", outputEntry.getClause().getName());
-        assertEquals("", outputEntry.getClause().getExpression());
+        assertEquals("Rank", outputEntry.getName());
+        assertEquals("", outputEntry.getExpression());
         assertEquals(DecisionRuleOutputType.STRING, outputEntry.getClause().getType());
+        assertEquals("C510845DFAD946D88AEEC0C138118C51", outputEntry.getSignature());
     }
 
     @Test

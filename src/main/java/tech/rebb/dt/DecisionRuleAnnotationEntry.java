@@ -17,12 +17,20 @@ public class DecisionRuleAnnotationEntry {
         return value;
     }
 
+    private final String signature;
+
+    public String getSignature() {
+        return signature;
+    }
+
     public DecisionRuleAnnotationEntry(DecisionRuleAnnotationClause clause, Object value) throws RebbDTException {
         if(clause == null)
             throw new RebbDTException("Rule annotation clause should not be null");
 
         this.clause = clause;
         this.value = value;
+
+        this.signature = Helper.sign(this.clause.getSignature() + this.value.toString());
     }
 
     public String getName() {

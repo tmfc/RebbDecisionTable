@@ -19,10 +19,18 @@ public class DecisionRuleOutputEntry {
         }
         //TODO: check value type
         this.value = value;
+
+        this.signature = Helper.sign(this.clause.getSignature() + this.value.toString());
     }
 
     public Object getValue() {
         return value;
+    }
+
+    private String signature;
+
+    public String getSignature() {
+        return signature;
     }
 
     public DecisionRuleOutputEntry(DecisionRuleOutputClause clause, Object value) throws RebbDTException {
@@ -38,8 +46,9 @@ public class DecisionRuleOutputEntry {
 
         this.clause = clause;
         this.value = value;
-    }
 
+        this.signature = Helper.sign(this.clause.getSignature() + this.value.toString());
+    }
 
     public String getExpression() {
         return this.clause.getExpression();

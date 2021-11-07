@@ -24,6 +24,7 @@ public class DecisionRuleInputEntryTest {
         assertEquals("GPA",inputEntity.getClause().getName());
         assertEquals("gpa",inputEntity.getClause().getExpression());
         assertEquals(">3.5",inputEntity.getExpression());
+        assertEquals("E795F0A1A4C637B5597E077833CF869B",inputEntity.getSignature());
     }
 
     @Test

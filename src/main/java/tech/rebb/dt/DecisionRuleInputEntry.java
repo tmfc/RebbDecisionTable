@@ -16,6 +16,12 @@ public class DecisionRuleInputEntry {
         return expression;
     }
 
+    private final String signature;
+
+    public String getSignature() {
+        return signature;
+    }
+
     public DecisionRuleInputEntry(DecisionRuleInputClause clause, String expression) throws RebbDTException {
         if(clause == null)
             throw new RebbDTException("Rule input clause should not be null");
@@ -29,5 +35,6 @@ public class DecisionRuleInputEntry {
 
         this.clause = clause;
         this.expression = expression;
+        this.signature = Helper.sign(this.clause.getSignature() + this.expression.toString());
     }
 }
