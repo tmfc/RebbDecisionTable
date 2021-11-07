@@ -16,10 +16,14 @@ public class DecisionRuleInput {
     }
 
     public boolean addEntry(DecisionRuleInputEntry entry) {
-        // Check duplicated entry
+        if(entry == null)
+            return false;
+
         for (DecisionRuleInputEntry e:
              this.entries) {
-            if(e.getSignature().equals(entry.getSignature()))
+            // Check duplicated clause
+            if(e.getClause() != null
+                    && e.getClause().getSignature().equals(entry.getClause().getSignature()))
                 return false;
         }
 

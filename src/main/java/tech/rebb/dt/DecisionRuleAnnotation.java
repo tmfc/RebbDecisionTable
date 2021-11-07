@@ -16,11 +16,13 @@ public class DecisionRuleAnnotation {
     }
 
     public boolean addEntry(DecisionRuleAnnotationEntry entry) {
-
-        // Check duplicated entry
+        if(entry == null)
+            return false;
         for (DecisionRuleAnnotationEntry e:
                 this.entries) {
-            if(e.getSignature().equals(entry.getSignature()))
+            // Check duplicated clause
+            if(e.getClause() != null
+                    && e.getClause().getSignature().equals(entry.getClause().getSignature()))
                 return false;
         }
         return this.entries.add(entry);

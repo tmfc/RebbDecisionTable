@@ -195,7 +195,7 @@ public class DecisionTableTest {
     }
 
     @Test
-    public void testMultipleAnnotationEntity() throws RebbDTException {
+    public void testMultipleAnnotationEntry() throws RebbDTException {
         DecisionRuleInputClause inputGPA = new DecisionRuleInputClause("GPA","gpa");
         DecisionRuleInput input1 = new DecisionRuleInput();
         DecisionRuleInputEntry inputEntity1 = new DecisionRuleInputEntry(inputGPA,">3.5");

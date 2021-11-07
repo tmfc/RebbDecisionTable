@@ -12,34 +12,39 @@ public class DecisionRuleInputTest {
         DecisionRuleInputEntry inputEntity = new DecisionRuleInputEntry(inputGPA,">3.5");
 
         DecisionRuleInput input = new DecisionRuleInput();
-        input.addEntry(inputEntity);
+        boolean result = input.addEntry(null);
+        assertFalse(result);
 
+        result = input.addEntry(inputEntity);
+        assertTrue(result);
+
+        assertEquals(1, input.getEntries().size());
         assertEquals("GPA",input.getEntries().get(0).getClause().getName());
         assertEquals("gpa",input.getEntries().get(0).getClause().getExpression());
         assertEquals(">3.5",input.getEntries().get(0).getExpression());
     }
+
     @Test
-    public void testDuplicatedEntry() throws RebbDTException {
+    public void testDuplicatedClause() throws RebbDTException {
         DecisionRuleInputClause inputGPA = new DecisionRuleInputClause("GPA","gpa");
-        DecisionRuleInputEntry inputEntity = new DecisionRuleInputEntry(inputGPA,">3.5");
+        DecisionRuleInputEntry inputEntityGPA = new DecisionRuleInputEntry(inputGPA,">3.5");
 
         DecisionRuleInput input = new DecisionRuleInput();
-        boolean result = input.addEntry(inputEntity);
+        boolean result = input.addEntry(inputEntityGPA);
         assertTrue(result);
 
-        result = input.addEntry(inputEntity);
+        DecisionRuleInputEntry inputEntityGPA2 = new DecisionRuleInputEntry(inputGPA,">3.7");
+        result = input.addEntry(inputEntityGPA2);
         assertFalse(result);
 
-        DecisionRuleInputEntry inputEntityDup = new DecisionRuleInputEntry(inputGPA,">3.5");
-        result = input.addEntry(inputEntityDup);
-        assertFalse(result);
+        assertEquals(1, input.getEntries().size());
 
-        DecisionRuleInputEntry inputEntity2 = new DecisionRuleInputEntry(inputGPA,">3.0 and <=3.5");
-        result = input.addEntry(inputEntity2);
+        DecisionRuleInputClause inputRank = new DecisionRuleInputClause("Rank","rank");
+        DecisionRuleInputEntry inputEntityRank = new DecisionRuleInputEntry(inputRank,"<=10");
+
+        result = input.addEntry(inputEntityRank);
         assertTrue(result);
 
         assertEquals(2, input.getEntries().size());
     }
-
 }
-
