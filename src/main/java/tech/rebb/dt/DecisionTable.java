@@ -67,6 +67,12 @@ public class DecisionTable {
         return outputClauses;
     }
 
+    private List<DecisionRuleAnnotationClause> annotationClauses;
+
+    public List<DecisionRuleAnnotationClause> getAnnotationClauses() {
+        return annotationClauses;
+    }
+
     private List<DecisionRule> rules;
 
     public List<DecisionRule> getRules() {

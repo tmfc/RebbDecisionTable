@@ -51,6 +51,12 @@ public class DecisionRule {
     public DecisionRuleOutput getOutput() {
         return output;
     }
+
+    public final DecisionRuleAnnotation annotation;
+
+    public DecisionRuleAnnotation getAnnotation() {
+        return annotation;
+    }
 //
 //    public List<DecisionRuleOutputEntry> getOutputs() {
 //        return outputs;
@@ -60,11 +66,16 @@ public class DecisionRule {
 
 
     public DecisionRule(List<DecisionRuleInput> inputs, DecisionRuleOutput output) {
+        this(inputs, output, null);
+    }
+
+    public DecisionRule(List<DecisionRuleInput> inputs, DecisionRuleOutput output, DecisionRuleAnnotation annotation) {
         this.engine = new EvalVisitor("", null);
         this.errors = new ArrayList<String>();
 
         this.inputs = inputs;
         this.output = output;
+        this.annotation = annotation;
     }
 
     public boolean evaluate()
