@@ -26,6 +26,7 @@ public class DecisionRuleOutputClause {
 
     private final List<String> allowedValues;
 
+    // This can be null
     public List<String> getAllowedValues() {
         return allowedValues;
     }

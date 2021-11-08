@@ -57,4 +57,14 @@ public class DecisionRuleOutputEntry {
         return this.clause.getName();
     }
 
+    public int getOutputOrder()
+    {
+        List<String> allowedValues = this.clause.getAllowedValues();
+        if(allowedValues == null)
+            return 0;
+        else
+        {
+            return allowedValues.indexOf(this.getValue());
+        }
+    }
 }

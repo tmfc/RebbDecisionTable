@@ -1,9 +1,6 @@
 package tech.rebb.dt;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -22,7 +19,17 @@ public class DecisionRule {
         this.obj = obj;
     }
 
-    public boolean is_match;
+    private int no;
+
+    public void setNo(int no) {
+        this.no = no;
+    }
+
+    public int getNo() {
+        return no;
+    }
+
+    private boolean is_match;
 
     public boolean isMatch() {
         return is_match;
@@ -199,4 +206,40 @@ public class DecisionRule {
         return null;
     }
 
+
+    public static class RuleNoComparator implements Comparator<DecisionRule>
+    {
+
+        @Override
+        public int compare(DecisionRule o1, DecisionRule o2) {
+            return o1.getNo() - o2.getNo();
+        }
+    }
+
+    public static class OutputOrderComparator implements Comparator<DecisionRule>
+    {
+        @Override
+        public int compare(DecisionRule o1, DecisionRule o2) {
+            List<DecisionRuleOutputEntry> outputEntries1 = o1.getOutput().getEntries();
+            List<DecisionRuleOutputEntry> outputEntries2 = o2.getOutput().getEntries();
+            if(outputEntries1.size() != outputEntries2.size())
+                return 0;
+
+            int result = 0;
+            for(int i = 0; i< outputEntries1.size(); i ++)
+            {
+                DecisionRuleOutputEntry entry1 = outputEntries1.get(i);
+                DecisionRuleOutputEntry entry2 = outputEntries2.get(i);
+
+                int order1 = entry1.getOutputOrder();
+                int order2 = entry2.getOutputOrder();
+                if(order1 != order2)
+                {
+                    result = order1 - order2;
+                    break;
+                }
+            }
+            return result;
+        }
+    }
 }

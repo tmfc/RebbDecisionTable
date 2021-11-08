@@ -232,7 +232,7 @@ public class DecisionTable {
         List<DecisionRule> matchedRules = new ArrayList<>();
         for (DecisionRule rule :
                 this.rules) {
-            if (rule.is_match)
+            if (rule.isMatch())
             {
                 matchedRules.add(rule);
             }
@@ -305,7 +305,7 @@ public class DecisionTable {
         List<DecisionRule> matchedRules = new ArrayList<>();
         for (DecisionRule rule :
                 this.rules) {
-            if (rule.is_match)
+            if (rule.isMatch())
             {
                 matchedRules.add(rule);
             }
