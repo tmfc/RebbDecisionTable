@@ -95,24 +95,24 @@ public class DecisionRule {
 
     public boolean evaluate() throws RebbDTException {
         boolean result = true;
-        // evaluate rule
+        // evaluate rule input
         result = this.doEvaluateRuleInput(input);
 
-        // rule satisfied
-        if(result)
-        {
-            //evaluate output value
-            for (DecisionRuleOutputEntry output:
-                 this.output.getEntries())   {
-                if(!Objects.equals(output.getExpression(), ""))
-                {
-                    Object value = this.doEvaluateRuleOutput(output);
-                    //TODO: check value type
-                    output.setValue(value);
-                }
-            }
-
-        }
+//        // rule matched
+//        if(result)
+//        {
+//            //evaluate output value
+//            for (DecisionRuleOutputEntry output:
+//                 this.output.getEntries())   {
+//                if(!Objects.equals(output.getExpression(), ""))
+//                {
+//                    Object value = this.doEvaluateRuleOutput(output);
+//                    //TODO: check value type
+//                    output.setValue(value);
+//                }
+//            }
+//
+//        }
         this.is_match = result;
         return result;
     }
@@ -166,8 +166,8 @@ public class DecisionRule {
     }
 
     //TODO add output eval visitor
-    private Object doEvaluateRuleOutput(DecisionRuleOutputEntry ruleOutput)
-    {
+//    private Object doEvaluateRuleOutput(DecisionRuleOutputEntry ruleOutput)
+//    {
 //        String expression = ruleOutput.getExpression();
 //        CharStream input = CharStreams.fromString(expression);
 //        RebbDTLexer lexer = new RebbDTLexer(input);
@@ -203,13 +203,11 @@ public class DecisionRule {
 //            return false;
 //        }
 //        return true;
-        return null;
-    }
-
+//        return null;
+//    }
 
     public static class RuleNoComparator implements Comparator<DecisionRule>
     {
-
         @Override
         public int compare(DecisionRule o1, DecisionRule o2) {
             return o1.getNo() - o2.getNo();
