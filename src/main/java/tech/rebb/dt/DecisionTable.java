@@ -162,8 +162,7 @@ public class DecisionTable {
 
     public void run()
     {
-        boolean checkResult =  this.checkRules();
-        if(!checkResult)
+        if(!this.checkRules())
         {
             this.has_error = true;
             return;
@@ -235,9 +234,23 @@ public class DecisionTable {
     }
 
     private boolean checkRules() {
-        boolean result = false;
-        if(this.hitPolicy == HitPolicy.PRIORITY || this.hitPolicy == HitPolicy.OUTPUT_ORDER)
+        boolean result;
+        if(this.hitPolicy == HitPolicy.FIRST)
         {
+            result = true;
+            // every rule should have rule no
+            for (DecisionRule rule :
+                    this.rules) {
+                if(rule.getNo() == 0) {
+                    result = false;
+                    break;
+                }
+            }
+        }
+        else if(this.hitPolicy == HitPolicy.PRIORITY || this.hitPolicy == HitPolicy.OUTPUT_ORDER)
+        {
+            result = false;
+            // at least one output clause should have allowed value list
             for (DecisionRuleOutputClause outputClause :
                     this.outputClauses) {
                 if (outputClause.getAllowedValues() != null)

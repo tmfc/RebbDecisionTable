@@ -280,7 +280,44 @@ public class DecisionTableTest {
     }
 
     @Test
-    public void testHitPolicyFirst() throws RebbDTException {
+    public void testHitPolicyFail() throws RebbDTException {
+        DecisionRuleInputClause inputGPA = new DecisionRuleInputClause("GPA","gpa");
+        DecisionRuleInput input1 = new DecisionRuleInput();
+        DecisionRuleInputEntry inputEntity1 = new DecisionRuleInputEntry(inputGPA,">=3.5");
+        input1.addEntry(inputEntity1);
+
+
+        DecisionRuleOutputClause outputRank = new DecisionRuleOutputClause("Rank","",DecisionRuleOutputType.STRING);
+        DecisionRuleOutput output = new DecisionRuleOutput();
+        DecisionRuleOutputEntry outputEntry = new DecisionRuleOutputEntry(outputRank, "A");
+        output.addEntry(outputEntry);
+
+        DecisionRule rule1 = new DecisionRule(input1, output);
+        rule1.setNo(2);
+
+        DecisionRuleInput input2 = new DecisionRuleInput();
+        DecisionRuleInputEntry inputEntity2 = new DecisionRuleInputEntry(inputGPA,">3.0 and <=3.5");
+        input2.addEntry(inputEntity2);
+
+        DecisionRuleOutput output2 = new DecisionRuleOutput();
+        DecisionRuleOutputEntry outputEntity2 = new DecisionRuleOutputEntry(outputRank, "B");
+        output2.addEntry(outputEntity2);
+
+        DecisionRule rule2 = new DecisionRule(input2, output2);
+
+        DecisionTable dt = new DecisionTable("Test Decision Table", 3.5);
+        dt.setHitPolicy(HitPolicy.FIRST);
+        dt.addRule(rule1);
+        dt.addRule(rule2);
+
+        dt.run();
+
+        assertTrue(dt.hasError());
+        assertNull(dt.getOutput());
+    }
+
+    @Test
+    public void testHitPolicyFirstSuccess() throws RebbDTException {
         DecisionRuleInputClause inputGPA = new DecisionRuleInputClause("GPA","gpa");
         DecisionRuleInput input1 = new DecisionRuleInput();
         DecisionRuleInputEntry inputEntity1 = new DecisionRuleInputEntry(inputGPA,">=3.5");
@@ -434,7 +471,7 @@ public class DecisionTableTest {
         assertNull(dt.getOutput());
 
     }
-    //TODO:加入对于hit policy的测试用例
+    //TODO:加入对于hit policy的更多测试用例
 
 }
 
