@@ -242,5 +242,199 @@ public class DecisionTableTest {
         assertEquals("Excellent", ((Map<String, Object>)dt.getOutputAnnotation().get("Annotation")).get("Remark"));
         assertEquals("Hire him/her", ((Map<String, Object>)dt.getOutputAnnotation().get("Annotation")).get("Note"));
     }
+
+    @Test
+    public void testHitPolicyUnique() throws RebbDTException {
+        DecisionRuleInputClause inputGPA = new DecisionRuleInputClause("GPA","gpa");
+        DecisionRuleInput input1 = new DecisionRuleInput();
+        DecisionRuleInputEntry inputEntity1 = new DecisionRuleInputEntry(inputGPA,">=3.5");
+        input1.addEntry(inputEntity1);
+
+
+        DecisionRuleOutputClause outputRank = new DecisionRuleOutputClause("Rank","",DecisionRuleOutputType.STRING);
+        DecisionRuleOutput output = new DecisionRuleOutput();
+        DecisionRuleOutputEntry outputEntry = new DecisionRuleOutputEntry(outputRank, "A");
+        output.addEntry(outputEntry);
+
+        DecisionRule rule1 = new DecisionRule(input1, output);
+
+        DecisionRuleInput input2 = new DecisionRuleInput();
+        DecisionRuleInputEntry inputEntity2 = new DecisionRuleInputEntry(inputGPA,">3.0 and <=3.5");
+        input2.addEntry(inputEntity2);
+
+        DecisionRuleOutput output2 = new DecisionRuleOutput();
+        DecisionRuleOutputEntry outputEntity2 = new DecisionRuleOutputEntry(outputRank, "B");
+        output2.addEntry(outputEntity2);
+
+        DecisionRule rule2 = new DecisionRule(input2, output2);
+
+        DecisionTable dt = new DecisionTable("Test Decision Table", 3.5);
+        dt.addRule(rule1);
+        dt.addRule(rule2);
+
+        dt.run();
+
+        assertTrue(dt.hasError());
+        assertEquals("More than one rule matched while hit policy is unique", dt.getErrors().get(0));
+        assertNull(dt.getOutput());
+    }
+
+    @Test
+    public void testHitPolicyFirst() throws RebbDTException {
+        DecisionRuleInputClause inputGPA = new DecisionRuleInputClause("GPA","gpa");
+        DecisionRuleInput input1 = new DecisionRuleInput();
+        DecisionRuleInputEntry inputEntity1 = new DecisionRuleInputEntry(inputGPA,">=3.5");
+        input1.addEntry(inputEntity1);
+
+
+        DecisionRuleOutputClause outputRank = new DecisionRuleOutputClause("Rank","",DecisionRuleOutputType.STRING);
+        DecisionRuleOutput output = new DecisionRuleOutput();
+        DecisionRuleOutputEntry outputEntry = new DecisionRuleOutputEntry(outputRank, "A");
+        output.addEntry(outputEntry);
+
+        DecisionRule rule1 = new DecisionRule(input1, output);
+        rule1.setNo(2);
+
+        DecisionRuleInput input2 = new DecisionRuleInput();
+        DecisionRuleInputEntry inputEntity2 = new DecisionRuleInputEntry(inputGPA,">3.0 and <=3.5");
+        input2.addEntry(inputEntity2);
+
+        DecisionRuleOutput output2 = new DecisionRuleOutput();
+        DecisionRuleOutputEntry outputEntity2 = new DecisionRuleOutputEntry(outputRank, "B");
+        output2.addEntry(outputEntity2);
+
+        DecisionRule rule2 = new DecisionRule(input2, output2);
+        rule2.setNo(1);
+
+        DecisionTable dt = new DecisionTable("Test Decision Table", 3.5);
+        dt.setHitPolicy(HitPolicy.FIRST);
+        dt.addRule(rule1);
+        dt.addRule(rule2);
+
+        dt.run();
+
+        assertFalse(dt.hasError());
+        assertNotNull(dt.getOutput());
+
+        assertEquals(1, dt.getOutput().size());
+        assertEquals("B", dt.getOutput().get("Result"));
+    }
+
+    @Test
+    public void testHitPolicyAnyFail() throws RebbDTException {
+        DecisionRuleInputClause inputGPA = new DecisionRuleInputClause("GPA","gpa");
+        DecisionRuleInput input1 = new DecisionRuleInput();
+        DecisionRuleInputEntry inputEntity1 = new DecisionRuleInputEntry(inputGPA,">=3.5");
+        input1.addEntry(inputEntity1);
+
+
+        DecisionRuleOutputClause outputRank = new DecisionRuleOutputClause("Rank","",DecisionRuleOutputType.STRING);
+        DecisionRuleOutput output = new DecisionRuleOutput();
+        DecisionRuleOutputEntry outputEntry = new DecisionRuleOutputEntry(outputRank, "A");
+        output.addEntry(outputEntry);
+
+        DecisionRule rule1 = new DecisionRule(input1, output);
+
+        DecisionRuleInput input2 = new DecisionRuleInput();
+        DecisionRuleInputEntry inputEntity2 = new DecisionRuleInputEntry(inputGPA,">3.0 and <=3.5");
+        input2.addEntry(inputEntity2);
+
+        DecisionRuleOutput output2 = new DecisionRuleOutput();
+        DecisionRuleOutputEntry outputEntity2 = new DecisionRuleOutputEntry(outputRank, "B");
+        output2.addEntry(outputEntity2);
+
+        DecisionRule rule2 = new DecisionRule(input2, output2);
+
+        DecisionTable dt = new DecisionTable("Test Decision Table", 3.5);
+        dt.setHitPolicy(HitPolicy.ANY);
+        dt.addRule(rule1);
+        dt.addRule(rule2);
+
+        dt.run();
+
+        assertTrue(dt.hasError());
+        assertEquals("More than one rule with different output matched while hit policy is any", dt.getErrors().get(0));
+        assertNull(dt.getOutput());
+    }
+
+    @Test
+    public void testHitPolicyAnySuccess() throws RebbDTException {
+        DecisionRuleInputClause inputGPA = new DecisionRuleInputClause("GPA","gpa");
+        DecisionRuleInput input1 = new DecisionRuleInput();
+        DecisionRuleInputEntry inputEntity1 = new DecisionRuleInputEntry(inputGPA,">=3.5");
+        input1.addEntry(inputEntity1);
+
+
+        DecisionRuleOutputClause outputRank = new DecisionRuleOutputClause("Rank","",DecisionRuleOutputType.STRING);
+        DecisionRuleOutput output = new DecisionRuleOutput();
+        DecisionRuleOutputEntry outputEntry = new DecisionRuleOutputEntry(outputRank, "A");
+        output.addEntry(outputEntry);
+
+        DecisionRule rule1 = new DecisionRule(input1, output);
+
+        DecisionRuleInput input2 = new DecisionRuleInput();
+        DecisionRuleInputEntry inputEntity2 = new DecisionRuleInputEntry(inputGPA,">3.0 and <=3.5");
+        input2.addEntry(inputEntity2);
+
+        DecisionRuleOutput output2 = new DecisionRuleOutput();
+        DecisionRuleOutputEntry outputEntity2 = new DecisionRuleOutputEntry(outputRank, "A");
+        output2.addEntry(outputEntity2);
+
+        DecisionRule rule2 = new DecisionRule(input2, output2);
+
+        DecisionTable dt = new DecisionTable("Test Decision Table", 3.5);
+        dt.setHitPolicy(HitPolicy.ANY);
+        dt.addRule(rule1);
+        dt.addRule(rule2);
+
+        dt.run();
+
+        assertFalse(dt.hasError());
+        assertNotNull(dt.getOutput());
+
+        assertEquals(1, dt.getOutput().size());
+        assertEquals("A", dt.getOutput().get("Result"));
+    }
+
+    @Test
+    public void testHitPolicyPriorityFail() throws RebbDTException {
+        DecisionRuleInputClause inputGPA = new DecisionRuleInputClause("GPA","gpa");
+        DecisionRuleInput input1 = new DecisionRuleInput();
+        DecisionRuleInputEntry inputEntity1 = new DecisionRuleInputEntry(inputGPA,">=3.5");
+        input1.addEntry(inputEntity1);
+
+
+        DecisionRuleOutputClause outputRank = new DecisionRuleOutputClause("Rank","",DecisionRuleOutputType.STRING);
+        DecisionRuleOutput output = new DecisionRuleOutput();
+        DecisionRuleOutputEntry outputEntry = new DecisionRuleOutputEntry(outputRank, "A");
+        output.addEntry(outputEntry);
+
+        DecisionRule rule1 = new DecisionRule(input1, output);
+
+        DecisionRuleInput input2 = new DecisionRuleInput();
+        DecisionRuleInputEntry inputEntity2 = new DecisionRuleInputEntry(inputGPA,">3.0 and <=3.5");
+        input2.addEntry(inputEntity2);
+
+        DecisionRuleOutput output2 = new DecisionRuleOutput();
+        DecisionRuleOutputEntry outputEntity2 = new DecisionRuleOutputEntry(outputRank, "A");
+        output2.addEntry(outputEntity2);
+
+        DecisionRule rule2 = new DecisionRule(input2, output2);
+
+        DecisionTable dt = new DecisionTable("Test Decision Table", 3.5);
+        dt.setHitPolicy(HitPolicy.PRIORITY);
+        dt.addRule(rule1);
+        dt.addRule(rule2);
+
+        dt.run();
+
+        assertTrue(dt.hasError());
+        assertEquals("There is no allowed values in any output clause while hit policy is priority or output order", dt.getErrors().get(0));
+
+        assertNull(dt.getOutput());
+
+    }
+    //TODO:加入对于hit policy的测试用例
+
 }
 

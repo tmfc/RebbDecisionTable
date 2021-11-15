@@ -77,9 +77,43 @@ public class DecisionTable {
         return rules;
     }
 
-//    public void setRules(List<DecisionRule> rules) {
-//        this.rules = rules;
-//    }
+    private String outputLabel;
+
+    public String getOutputLabel() {
+        return outputLabel;
+    }
+
+    public void setOutputLabel(String outputLabel) {
+        this.outputLabel = outputLabel;
+    }
+
+    private String annotationLabel;
+
+    public String getAnnotationLabel() {
+        return annotationLabel;
+    }
+
+    public void setAnnotationLabel(String annotationLabel) {
+        this.annotationLabel = annotationLabel;
+    }
+
+    public DecisionTable(String name, Object obj, HitPolicy hitPolicy, BuildInAggregation aggregation) {
+        this.name = name;
+        this.obj = obj;
+        this.hitPolicy = hitPolicy;
+        this.aggregation = aggregation;
+
+        this.errors = new ArrayList<>();
+        this.evaluated = false;
+
+        this.outputLabel = "Result";
+        this.annotationLabel = "Annotation";
+    }
+
+    public DecisionTable(String name, Object obj)
+    {
+        this(name, obj, HitPolicy.UNIQUE, BuildInAggregation.NA);
+    }
 
     public boolean addRule(DecisionRule rule)
     {
@@ -126,46 +160,16 @@ public class DecisionTable {
         return true;
     }
 
-    private String outputLabel;
-
-    public String getOutputLabel() {
-        return outputLabel;
-    }
-
-    public void setOutputLabel(String outputLabel) {
-        this.outputLabel = outputLabel;
-    }
-
-    private String annotationLabel;
-
-    public String getAnnotationLabel() {
-        return annotationLabel;
-    }
-
-    public void setAnnotationLabel(String annotationLabel) {
-        this.annotationLabel = annotationLabel;
-    }
-
-    public DecisionTable(String name, Object obj, HitPolicy hitPolicy, BuildInAggregation aggregation) {
-        this.name = name;
-        this.obj = obj;
-        this.hitPolicy = hitPolicy;
-        this.aggregation = aggregation;
-
-        this.errors = new ArrayList<>();
-        this.evaluated = false;
-
-        this.outputLabel = "Result";
-        this.annotationLabel = "Annotation";
-    }
-
-    public DecisionTable(String name, Object obj)
-    {
-        this(name, obj, HitPolicy.UNIQUE, BuildInAggregation.NA);
-    }
-
     public void run()
     {
+        boolean checkResult =  this.checkRules();
+        if(!checkResult)
+        {
+            this.has_error = true;
+            return;
+        }
+        // sort rules
+        this.sortRules();
         // check rules
         if(this.rules == null || this.rules.size() == 0) {
             this.has_error = true;
@@ -189,8 +193,8 @@ public class DecisionTable {
             if(!result)
                 continue;
 
-            // if hit policy is first, means no more rule need to be evaluated
-            if(this.hitPolicy == HitPolicy.FIRST)
+            // if hit policy is first or priority, means no more rule need to be evaluated
+            if(this.hitPolicy == HitPolicy.FIRST || this.hitPolicy == HitPolicy.PRIORITY)
             {
                 break;
             }
@@ -204,12 +208,63 @@ public class DecisionTable {
                     break;
                 }
             }
+            // the output entries should be equal for hit policy "Any"
+            else if(this.hitPolicy == HitPolicy.ANY)
+            {
+                if(matchedRules.size() == 0)
+                    matchedRules.add(rule);
+                else
+                {
+                    // new match rule's signature should be equal to exist matched rule
+                    if(rule.getOutput().getSignature().equals(matchedRules.get(0).getOutput().getSignature()))
+                        matchedRules.add(rule);
+                    else
+                    {
+                        this.has_error = true;
+                        this.errors.add("More than one rule with different output matched while hit policy is any");
+                        break;
+                    }
+                }
+            }
             else
             {
                 matchedRules.add(rule);
             }
         }
         this.evaluated = true;
+    }
+
+    private boolean checkRules() {
+        boolean result = false;
+        if(this.hitPolicy == HitPolicy.PRIORITY || this.hitPolicy == HitPolicy.OUTPUT_ORDER)
+        {
+            for (DecisionRuleOutputClause outputClause :
+                    this.outputClauses) {
+                if (outputClause.getAllowedValues() != null)
+                {
+                    result = true;
+                    break;
+                }
+            }
+            if(!result)
+            {
+                this.errors.add("There is no allowed values in any output clause while hit policy is priority or output order");
+            }
+        }
+        else
+        {
+            result = true;
+        }
+        return result;
+    }
+
+    private void sortRules() {
+        // sort by rule number for First and Rule Order hit policy
+        if(this.hitPolicy == HitPolicy.FIRST || this.hitPolicy == HitPolicy.RULE_ORDER)
+            this.rules.sort(new DecisionRule.RuleNoComparator());
+        // by output order for Priority and output order policy
+        else if(this.hitPolicy == HitPolicy.PRIORITY || this.hitPolicy == HitPolicy.OUTPUT_ORDER)
+            this.rules.sort(new DecisionRule.OutputOrderComparator());
     }
 
     public Map<String, Object> getOutput() {
@@ -242,7 +297,10 @@ public class DecisionTable {
             return null;
 
         //single hit policies,U A P F
-        if(this.hitPolicy == HitPolicy.UNIQUE || this.hitPolicy == HitPolicy.FIRST)
+        if(this.hitPolicy == HitPolicy.UNIQUE
+                || this.hitPolicy == HitPolicy.FIRST
+                || this.hitPolicy == HitPolicy.ANY
+                || this.hitPolicy == HitPolicy.PRIORITY)
         {
             List<DecisionRuleOutputEntry> ruleOutputEntries = matchedRules.get(0).getOutput().getEntries();
             if(singleOutput)
@@ -258,14 +316,6 @@ public class DecisionTable {
             }
         }
         //TODO: process other hit policies
-        else if(this.hitPolicy == HitPolicy.ANY)
-        {
-            //TODO: all output should be equal, if not return false;
-        }
-        else if(this.hitPolicy == HitPolicy.PRIORITY)
-        {
-            //TODO: sort matched rules by output priority,then return first
-        }
         //multiple hit policies O R C
         else if(this.hitPolicy == HitPolicy.OUTPUT_ORDER)
         {
@@ -315,7 +365,10 @@ public class DecisionTable {
             return null;
 
         //single hit policies,U A P F
-        if(this.hitPolicy == HitPolicy.UNIQUE || this.hitPolicy == HitPolicy.FIRST)
+        if(this.hitPolicy == HitPolicy.UNIQUE
+                || this.hitPolicy == HitPolicy.FIRST
+                || this.hitPolicy == HitPolicy.ANY
+                || this.hitPolicy == HitPolicy.PRIORITY)
         {
             List<DecisionRuleAnnotationEntry> ruleAnnotationEntries = matchedRules.get(0).getAnnotation().getEntries();
             if(singleAnnotationResult)
@@ -329,14 +382,6 @@ public class DecisionTable {
                 }
                 annotationResult.put(this.annotationLabel, result);
             }
-        }
-        else if(this.hitPolicy == HitPolicy.ANY)
-        {
-            //TODO: all output should be equal, if not return false;
-        }
-        else if(this.hitPolicy == HitPolicy.PRIORITY)
-        {
-            //TODO: sort matched rules by output priority,then return first
         }
         //multiple hit policies O R C
         else if(this.hitPolicy == HitPolicy.OUTPUT_ORDER)
