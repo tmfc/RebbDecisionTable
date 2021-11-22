@@ -169,11 +169,6 @@ public class DecisionTable {
         }
         // sort rules
         this.sortRules();
-        // check rules
-        if(this.rules == null || this.rules.size() == 0) {
-            this.has_error = true;
-            this.errors.add("There is no rule in decision table");
-        }
 
         List<DecisionRule> matchedRules = new ArrayList<>();
 
@@ -234,8 +229,21 @@ public class DecisionTable {
     }
 
     private boolean checkRules() {
+        // check rules number
+        if(this.rules == null || this.rules.size() == 0) {
+            this.errors.add("There is no rule in decision table");
+            return false;
+        }
+
+        // check rule output
+        if(this.outputClauses == null || this.outputClauses.size() == 0) {
+            this.errors.add("There is no output clause in decision table");
+            return false;
+        }
+
         boolean result;
-        if(this.hitPolicy == HitPolicy.FIRST)
+
+        if(this.hitPolicy == HitPolicy.FIRST || this.hitPolicy == HitPolicy.RULE_ORDER)
         {
             result = true;
             // every rule should have rule no
@@ -262,6 +270,30 @@ public class DecisionTable {
             if(!result)
             {
                 this.errors.add("There is no allowed values in any output clause while hit policy is priority or output order");
+            }
+        }
+        else if(this.hitPolicy == HitPolicy.COLLECT)
+        {
+            // should have single output
+            if(this.outputClauses.size() == 1)
+                result = true;
+            else
+            {
+                result = false;
+                this.errors.add("The decision table should have single output while hit policy is collect");
+            }
+            if(this.aggregation == BuildInAggregation.NA)
+            {
+                result = false;
+                this.errors.add("The aggregation of decision table should not be NA while hit policy is collect");
+            }
+            if((this.aggregation == BuildInAggregation.MAX
+                    || this.aggregation == BuildInAggregation.MIN
+                || this.aggregation == BuildInAggregation.SUM)
+                    && this.outputClauses.get(0).getType() != DecisionRuleOutputType.NUMBER)
+            {
+                result = false;
+                this.errors.add("The output type should be number while hit policy is 'collect' and aggregation is not 'count'");
             }
         }
         else
@@ -340,7 +372,14 @@ public class DecisionTable {
         }
         else if(this.hitPolicy == HitPolicy.COLLECT)
         {
+            ArrayList<Object> output_collection = new ArrayList<>();
 
+            for (DecisionRule rule :
+                    matchedRules) {
+                output_collection.add(rule.getOutput().getEntries().get(0).getValue());
+            }
+            Aggregator aggregator = new Aggregator(this.aggregation);
+            output.put("Result", aggregator.run(output_collection));
         }
 
 
