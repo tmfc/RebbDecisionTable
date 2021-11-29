@@ -184,6 +184,7 @@ public class DecisionTable {
                //TODO: handle exception
             }
 
+            // rule does not match
             if(!result)
                 continue;
 
@@ -362,13 +363,31 @@ public class DecisionTable {
         }
         //TODO: process other hit policies
         //multiple hit policies O R C
-        else if(this.hitPolicy == HitPolicy.OUTPUT_ORDER)
+        else if(this.hitPolicy == HitPolicy.OUTPUT_ORDER || this.hitPolicy == HitPolicy.RULE_ORDER)
         {
+            List<Object> outputList = new ArrayList<>();
+            if(singleOutput)
+            {
+                for (DecisionRule rule :
+                        matchedRules) {
+                    outputList.add(rule.getOutput().getEntries().get(0).getValue());
+                }
+                output.put("Result", outputList);
+            }
+            else{
+                for (DecisionRule rule :
+                        matchedRules) {
+                    Map<String, Object> result = new HashMap<>();
 
-        }
-        else if(this.hitPolicy == HitPolicy.RULE_ORDER)
-        {
+                    for (DecisionRuleOutputEntry outputEntry :
+                            rule.getOutput().getEntries()) {
+                        result.put(outputEntry.getName(), outputEntry.getValue());
+                    }
+                    outputList.add(result);
+                }
 
+                output.put(this.outputLabel, outputList);
+            }
         }
         else if(this.hitPolicy == HitPolicy.COLLECT)
         {

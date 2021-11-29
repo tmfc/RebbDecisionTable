@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -479,7 +480,6 @@ public class DecisionTableTest {
         DecisionRuleInputEntry inputEntity1 = new DecisionRuleInputEntry(inputGPA,">=3.5");
         input1.addEntry(inputEntity1);
 
-
         ArrayList<String> allowedListRank = new ArrayList<>();
         allowedListRank.add("A");
         allowedListRank.add("B");
@@ -605,7 +605,6 @@ public class DecisionTableTest {
         input1.addEntry(inputEntity1);
 
         DecisionRuleOutputClause outputRank = new DecisionRuleOutputClause("Rank","",DecisionRuleOutputType.STRING);
-        DecisionRuleOutputClause outputScore = new DecisionRuleOutputClause("Score","",DecisionRuleOutputType.NUMBER);
 
         DecisionRuleOutput output = new DecisionRuleOutput();
         DecisionRuleOutputEntry outputEntryRank = new DecisionRuleOutputEntry(outputRank, "A");
@@ -725,7 +724,116 @@ public class DecisionTableTest {
         assertEquals(2, ((Integer)dt.getOutput().get("Result")).intValue());
     }
 
-    //TODO:加入对于hit policy的更多测试用例
+    @Test
+    public void testHitPolicyRuleOrder() throws RebbDTException {
+        DecisionRuleInputClause inputGPA = new DecisionRuleInputClause("GPA","gpa");
+        DecisionRuleInput input1 = new DecisionRuleInput();
+        DecisionRuleInputEntry inputEntity1 = new DecisionRuleInputEntry(inputGPA,">3.5");
+        input1.addEntry(inputEntity1);
 
+        DecisionRuleOutputClause outputRank = new DecisionRuleOutputClause("Rank","",DecisionRuleOutputType.STRING);
+        DecisionRuleOutputClause outputScore = new DecisionRuleOutputClause("Score","",DecisionRuleOutputType.NUMBER);
+
+        DecisionRuleOutput output = new DecisionRuleOutput();
+        DecisionRuleOutputEntry outputEntryRank = new DecisionRuleOutputEntry(outputRank, "A");
+        DecisionRuleOutputEntry outputEntryScore = new DecisionRuleOutputEntry(outputScore, 10);
+        output.addEntry(outputEntryRank);
+        output.addEntry(outputEntryScore);
+
+        DecisionRule rule1 = new DecisionRule(input1, output);
+        rule1.setNo(2);
+
+        DecisionRuleInput input2 = new DecisionRuleInput();
+        DecisionRuleInputEntry inputEntity2 = new DecisionRuleInputEntry(inputGPA,">3.0");
+        input2.addEntry(inputEntity2);
+
+        DecisionRuleOutput output2 = new DecisionRuleOutput();
+        DecisionRuleOutputEntry outputEntryRank2 = new DecisionRuleOutputEntry(outputRank, "B");
+        DecisionRuleOutputEntry outputEntryScore2 = new DecisionRuleOutputEntry(outputScore, 8);
+        output2.addEntry(outputEntryRank2);
+        output2.addEntry(outputEntryScore2);
+
+        DecisionRule rule2 = new DecisionRule(input2, output2);
+        rule2.setNo(1);
+
+        DecisionTable dt = new DecisionTable("Test Decision Table", 3.6);
+        dt.setHitPolicy(HitPolicy.RULE_ORDER);
+        dt.addRule(rule1);
+        dt.addRule(rule2);
+
+        dt.run();
+
+        assertFalse(dt.hasError());
+        assertEquals(1, dt.getOutput().size());
+        assertTrue(dt.getOutput().get("Result") instanceof ArrayList);
+        assertEquals(2, ((ArrayList)dt.getOutput().get("Result")).size());
+
+        Map<String,Object> result0 = (Map<String,Object>)((ArrayList)dt.getOutput().get("Result")).get(0);
+        assertEquals("B", result0.get("Rank"));
+        assertEquals(8, result0.get("Score"));
+
+        Map<String,Object> result1 = (Map<String,Object>)((ArrayList)dt.getOutput().get("Result")).get(1);
+        assertEquals("A", result1.get("Rank"));
+        assertEquals(10, result1.get("Score"));
+    }
+
+    @Test
+    public void testHitPolicyOutputOrder() throws RebbDTException {
+        DecisionRuleInputClause inputGPA = new DecisionRuleInputClause("GPA","gpa");
+        DecisionRuleInput input1 = new DecisionRuleInput();
+        DecisionRuleInputEntry inputEntity1 = new DecisionRuleInputEntry(inputGPA,">3.5");
+        input1.addEntry(inputEntity1);
+
+        ArrayList<String> allowedListRank = new ArrayList<>();
+        allowedListRank.add("C");
+        allowedListRank.add("B");
+        allowedListRank.add("A");
+
+        DecisionRuleOutputClause outputRank = new DecisionRuleOutputClause("Rank","",DecisionRuleOutputType.STRING, allowedListRank);
+        DecisionRuleOutputClause outputScore = new DecisionRuleOutputClause("Score","",DecisionRuleOutputType.NUMBER);
+
+        DecisionRuleOutput output = new DecisionRuleOutput();
+
+        DecisionRuleOutputEntry outputEntryRank = new DecisionRuleOutputEntry(outputRank, "A");
+        DecisionRuleOutputEntry outputEntryScore = new DecisionRuleOutputEntry(outputScore, 10);
+        output.addEntry(outputEntryRank);
+        output.addEntry(outputEntryScore);
+
+        DecisionRule rule1 = new DecisionRule(input1, output);
+        rule1.setNo(1);
+
+        DecisionRuleInput input2 = new DecisionRuleInput();
+        DecisionRuleInputEntry inputEntity2 = new DecisionRuleInputEntry(inputGPA,">3.0");
+        input2.addEntry(inputEntity2);
+
+        DecisionRuleOutput output2 = new DecisionRuleOutput();
+        DecisionRuleOutputEntry outputEntryRank2 = new DecisionRuleOutputEntry(outputRank, "B");
+        DecisionRuleOutputEntry outputEntryScore2 = new DecisionRuleOutputEntry(outputScore, 8);
+        output2.addEntry(outputEntryRank2);
+        output2.addEntry(outputEntryScore2);
+
+        DecisionRule rule2 = new DecisionRule(input2, output2);
+        rule2.setNo(2);
+
+        DecisionTable dt = new DecisionTable("Test Decision Table", 3.6);
+        dt.setHitPolicy(HitPolicy.OUTPUT_ORDER);
+        dt.addRule(rule1);
+        dt.addRule(rule2);
+
+        dt.run();
+
+        assertFalse(dt.hasError());
+        assertEquals(1, dt.getOutput().size());
+        assertTrue(dt.getOutput().get("Result") instanceof ArrayList);
+        assertEquals(2, ((ArrayList)dt.getOutput().get("Result")).size());
+
+        Map<String,Object> result0 = (Map<String,Object>)((ArrayList)dt.getOutput().get("Result")).get(0);
+        assertEquals("B", result0.get("Rank"));
+        assertEquals(8, result0.get("Score"));
+
+        Map<String,Object> result1 = (Map<String,Object>)((ArrayList)dt.getOutput().get("Result")).get(1);
+        assertEquals("A", result1.get("Rank"));
+        assertEquals(10, result1.get("Score"));
+    }
 }
 
